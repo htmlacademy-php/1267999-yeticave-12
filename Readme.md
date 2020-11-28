@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Константин Ерошкин](https://up.htmlacademy.ru/php/12/user/1267999).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
