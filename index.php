@@ -40,6 +40,22 @@ $ads = [
         'url' => 'img/lot-6.jpg'
     ]
 ];
+
+/**
+ * добавляет к цене ' ₽', в случае стоимости от 1000 устанавливает разделитель тысяч
+ * @param $price int цена товара, введенная пользователем
+ * @return string цена товара для объявления
+ */
+function get_price(int $price): string
+{
+    if ($price > 0 && $price < 1000) {
+        return $price . ' ₽';
+    } elseif ($price >= 1000) {
+        return number_format($price, 0, '', ' ') . ' ₽';
+    } else {
+        return 'Возникли технические неполадки';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -109,12 +125,12 @@ $ads = [
                     <img src="<?=$ad['url']; ?>" width="350" height="260" alt="<?=$ad['name']; ?>">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?=$ad['category']; ?>></span>
+                    <span class="lot__category"><?=$ad['category']; ?></span>
                     <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=$ad['name']?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$ad['price']; ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=get_price($ad['price']); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
@@ -134,7 +150,7 @@ $ads = [
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
             <li class="nav__item">
-                <a href="pages/all-lots.html"><?=$category; ?>></a>
+                <a href="pages/all-lots.html"><?=$category; ?></a>
             </li>
             <?php endforeach; ?>
         </ul>
