@@ -27,8 +27,8 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?= get_price($ad['price']); ?></span>
                         </div>
-                        <div class="lot__timer timer">
-                            12:23
+                        <div class="lot__timer timer<?php if ((int)get_date($ad['calculation_date'])[0] < 1): ?> timer--finishing<?php endif ?>">
+                            <?= (get_date($ad['calculation_date'])[0] . ':' . get_date($ad['calculation_date'])[1]); ?>
                         </div>
                     </div>
                 </div>
