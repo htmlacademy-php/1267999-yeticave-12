@@ -15,42 +15,42 @@ $ads = [
         'category' => $categories['boards'],
         'price' => 10999,
         'url' => 'img/lot-1.jpg',
-        'calculation_date' => '2020-12-16'
+        'calculation_date' => '2021-01-08'
     ],
     [
         'name' => 'DC Ply Mens 2016/2017 Snowboard',
         'category' => $categories['boards'],
         'price' => 159999,
         'url' => 'img/lot-2.jpg',
-        'calculation_date' => '2020-12-21'
+        'calculation_date' => '2021-01-09'
     ],
     [
         'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
         'category' => $categories['mounts'],
         'price' => 8000,
         'url' => 'img/lot-3.jpg',
-        'calculation_date' => '2020-12-22'
+        'calculation_date' => '2021-01-11'
     ],
     [
         'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
         'category' => $categories['boots'],
         'price' => 10999,
         'url' => 'img/lot-4.jpg',
-        'calculation_date' => '2020-12-23'
+        'calculation_date' => '2021-01-12'
     ],
     [
         'name' => 'Куртка для сноуборда DC Mutiny Charocal',
         'category' => $categories['clothes'],
         'price' => 7500,
         'url' => 'img/lot-5.jpg',
-        'calculation_date' => '2020-12-24'
+        'calculation_date' => '2021-01-13'
     ],
     [
         'name' => 'Маска Oakley Canopy',
         'category' => $categories['various'],
         'price' => 5400,
         'url' => 'img/lot-6.jpg',
-        'calculation_date' => '2020-12-25'
+        'calculation_date' => '2021-01-14'
     ]
 ];
 
@@ -80,9 +80,8 @@ function get_date(string $date_ad): array
     $time_in_hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
     $minutes = floor(($interval - ($time_in_hours * 3600)) / 60);
     $time_in_minutes = str_pad($minutes, 2, "0", STR_PAD_LEFT);
-    return $time = [$time_in_hours, $time_in_minutes];
+    return ["$time_in_hours:$time_in_minutes"];
 }
-$time = get_date($ads['0']['calculation_date']);
 require_once ('helpers.php');
 $main_content = include_template('main.php', ['ads' => $ads]);
 $layout_content = include_template('layout.php', ['content' => $main_content, 'title' => 'Yeticave - Главная', 'categories' => $categories]);
