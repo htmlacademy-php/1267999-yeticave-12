@@ -15,44 +15,48 @@ $ads = [
         'category' => $categories['boards'],
         'price' => 10999,
         'url' => 'img/lot-1.jpg',
-        'calculation_date' => '2021-01-08'
+        'calculation_date' => '2021-01-22'
     ],
     [
         'name' => 'DC Ply Mens 2016/2017 Snowboard',
         'category' => $categories['boards'],
         'price' => 159999,
         'url' => 'img/lot-2.jpg',
-        'calculation_date' => '2021-01-09'
+        'calculation_date' => '2021-01-23'
     ],
     [
         'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
         'category' => $categories['mounts'],
         'price' => 8000,
         'url' => 'img/lot-3.jpg',
-        'calculation_date' => '2021-01-11'
+        'calculation_date' => '2021-01-24'
     ],
     [
         'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
         'category' => $categories['boots'],
         'price' => 10999,
         'url' => 'img/lot-4.jpg',
-        'calculation_date' => '2021-01-12'
+        'calculation_date' => '2021-01-25'
     ],
     [
         'name' => 'Куртка для сноуборда DC Mutiny Charocal',
         'category' => $categories['clothes'],
         'price' => 7500,
         'url' => 'img/lot-5.jpg',
-        'calculation_date' => '2021-01-13'
+        'calculation_date' => '2021-01-26'
     ],
     [
         'name' => 'Маска Oakley Canopy',
         'category' => $categories['various'],
         'price' => 5400,
         'url' => 'img/lot-6.jpg',
-        'calculation_date' => '2021-01-14'
+        'calculation_date' => '2021-01-27'
     ]
 ];
+
+foreach ($ads as ['calculation_date' => $calculation_date]) {
+    $calculation_dates[] = $calculation_date;
+}
 
 /**
  * добавляет к цене ' ₽', в случае стоимости от 1000 устанавливает разделитель тысяч
