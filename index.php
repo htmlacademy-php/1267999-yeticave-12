@@ -1,58 +1,17 @@
 <?php
+$con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
+$sql_category = "SELECT title, cod FROM category";
+$result_category = mysqli_query($con, $sql_category);
+$categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
 $is_auth = rand(0, 1);
 $user_name = 'Konstantin'; // укажите здесь ваше имя
-$categories = [
-    'boards' => 'Доски и лыжи',
-    'mounts' => 'Крепления',
-    'boots' => 'Ботинки',
-    'clothes' => 'Одежда',
-    'tools' => 'Инструменты',
-    'various' => 'Разное'
-];
-$ads = [
-    [
-        'name' => '2014 Rossignol District Snowboard',
-        'category' => $categories['boards'],
-        'price' => 10999,
-        'url' => 'img/lot-1.jpg',
-        'calculation_date' => '2021-01-22'
-    ],
-    [
-        'name' => 'DC Ply Mens 2016/2017 Snowboard',
-        'category' => $categories['boards'],
-        'price' => 159999,
-        'url' => 'img/lot-2.jpg',
-        'calculation_date' => '2021-01-23'
-    ],
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => $categories['mounts'],
-        'price' => 8000,
-        'url' => 'img/lot-3.jpg',
-        'calculation_date' => '2021-01-24'
-    ],
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => $categories['boots'],
-        'price' => 10999,
-        'url' => 'img/lot-4.jpg',
-        'calculation_date' => '2021-01-25'
-    ],
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category' => $categories['clothes'],
-        'price' => 7500,
-        'url' => 'img/lot-5.jpg',
-        'calculation_date' => '2021-01-26'
-    ],
-    [
-        'name' => 'Маска Oakley Canopy',
-        'category' => $categories['various'],
-        'price' => 5400,
-        'url' => 'img/lot-6.jpg',
-        'calculation_date' => '2021-01-27'
-    ]
-];
+$sql_ads = "SELECT name, title as category, price_rate as price, image as url, date_completion as calculation_date FROM category
+    INNER JOIN lot ON category.id = lot.id_category
+    INNER JOIN rate ON lot.id = rate.id_lot
+    WHERE lot.date_creation < lot.date_completion
+    ORDER BY date_creation ASC";
+$result_ads = mysqli_query($con, $sql_ads);
+$ads = mysqli_fetch_all($result_ads, MYSQLI_ASSOC);
 
 foreach ($ads as ['calculation_date' => $calculation_date]) {
     $calculation_dates[] = $calculation_date;
@@ -87,6 +46,6 @@ function get_date(string $date_ad): array
     return ["$time_in_hours:$time_in_minutes"];
 }
 require_once ('helpers.php');
-$main_content = include_template('main.php', ['ads' => $ads]);
+$main_content = include_template('main.php', ['ads' => $ads, 'categories' => $categories]);
 $layout_content = include_template('layout.php', ['content' => $main_content, 'title' => 'Yeticave - Главная', 'categories' => $categories]);
 print($layout_content);
