@@ -49,13 +49,14 @@ SELECT name as lot, title as category FROM lot
 /*
 обновить название лота по его идентификатору
 */
-UPDATE `lot` SET `name` = 'Snowboard' WHERE (`id` = '2');
+# UPDATE `lot` SET `name` = 'Snowboard' WHERE (`id` = '2');
 
 /*
 получить список ставок для лота по его идентификатору с сортировкой по дате
 */
 SELECT lot.id as lot_id, name, rate.id as rate_id, date_rate, price_rate  FROM lot
-    INNER JOIN rate ON lot.id = rate.id_lot
-    WHERE lot.id = 2
-    ORDER BY date_creation ASC;
+     INNER JOIN rate ON lot.id = rate.id_lot
+     WHERE lot.id = 2
+     ORDER BY date_creation ASC;
 
+SELECT lot.id FROM lot
