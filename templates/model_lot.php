@@ -58,19 +58,19 @@
       </ul>
     </nav>
     <section class="lot-item container">
-        <h2><?= $ads['category']; ?></h2>
+        <h2><?= $ads_lot['category']; ?></h2>
       <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
-            <img src="<?= $ads['url']; ?>" width="730" height="548" alt="<?= $ads['category']; ?>>">
+            <img src="<?= $ads_lot['url']; ?>" width="730" height="548" alt="<?= $ads_lot['category']; ?>>">
           </div>
-          <p class="lot-item__category">Категория: <span><?= $ads['category']; ?></span></p>
-            <p class="lot-item__description"></p><?= $ads['description']; ?></p>
+          <p class="lot-item__category">Категория: <span><?= $ads_lot['category']; ?></span></p>
+            <p class="lot-item__description"></p><?= $ads_lot['description']; ?></p>
         </div>
         <div class="lot-item__right">
           <div class="lot-item__state">
-            <div class="lot-item__timer timer<?php if ((int)get_date($ads['calculation_date'])[0] < 1): ?> timer--finishing<?php endif ?>">
-                <?= (get_date($ads['calculation_date'])[0]); ?>
+            <div class="lot-item__timer timer<?php if ((int)get_date($ads_lot['calculation_date'])[0] < 1): ?> timer--finishing<?php endif ?>">
+                <?= (get_date($ads_lot['calculation_date'])[0]); ?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
