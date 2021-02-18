@@ -1,17 +1,25 @@
 <?php
+require_once ('helpers.php');
 
 $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
 
+/**
+ * @return array двумерный ассоциативный массив из базы данных с названиями и символьным кодом категорий
+ */
 function get_categories() {
-    $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
+    global $con;
     $sql_category = "SELECT title, cod FROM category";
     $result_category = mysqli_query($con, $sql_category);
     $categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
     return $categories;
 }
 
-function get_ads() {
-    $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
+/**
+ * @return array двумерный ассоциативный массив из базы данных для отображения лотов на главной странице
+ */
+function get_ads(): array
+{
+    global $con;
     $sql_ads = "SELECT lot.id as id, name, title as category, price_rate as price, image as url, date_completion as calculation_date FROM category
     INNER JOIN lot ON category.id = lot.id_category
     INNER JOIN rate ON lot.id = rate.id_lot
@@ -22,21 +30,33 @@ function get_ads() {
     return $ads;
 }
 
-function get_lots() {
-    $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
+/**
+ * @return array двумерный ассоциативный массив из базы данных для отображения id лотов
+ */
+function get_lots(): array
+{
+    global $con;
     $lot_sql = "SELECT lot.id FROM lot";
     $result_lot = mysqli_query($con, $lot_sql);
     $lots = mysqli_fetch_all($result_lot, MYSQLI_ASSOC);
     return $lots;
 }
 
-function get_ads_lot() {
-    $lot_id = filter_input(INPUT_GET, 'id');
-    $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
-    $sql_ads = "SELECT lot.id as id, title as category, name, image as url, description, date_completion as calculation_date FROM lot
+/**
+ * @param int $lot_id id лота
+ * @return array  ассоциативный массив из базы данных для отображения карточки лота
+ */
+
+function get_ads_lot(int $lot_id): array
+{
+    global $con;
+    $sql = "SELECT lot.id as id, title as category, name, image as url, description, date_completion as calculation_date FROM lot
         INNER JOIN category ON lot.id_category = category.id
-        WHERE lot.id = $lot_id";
-    $result_ads = mysqli_query($con, $sql_ads);
-    $ads_lot = mysqli_fetch_all($result_ads, MYSQLI_ASSOC)[0];
+        WHERE lot.id = ?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $lot_id);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $ads_lot = mysqli_fetch_assoc($res);
     return $ads_lot;
 }

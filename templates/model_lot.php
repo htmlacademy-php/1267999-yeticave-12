@@ -69,8 +69,8 @@
         </div>
         <div class="lot-item__right">
           <div class="lot-item__state">
-            <div class="lot-item__timer timer<?php if ((int)get_date($ads_lot['calculation_date'])[0] < 1): ?> timer--finishing<?php endif ?>">
-                <?= (get_date($ads_lot['calculation_date'])[0]); ?>
+            <div class="lot-item__timer timer<?php if ($ads_lot['lot_timer']): ?> timer--finishing<?php endif ?>">
+                <?= ($ads_lot['calculation_date']); ?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
