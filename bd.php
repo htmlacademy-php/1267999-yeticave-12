@@ -1,6 +1,4 @@
 <?php
-require_once ('helpers.php');
-
 $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
 
 /**
