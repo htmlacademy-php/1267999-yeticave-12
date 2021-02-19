@@ -143,4 +143,40 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+/**
+ * @param string $date_ad дата окончания аукциона объявления
+ * @return array ассоциативный массив ключ is_finishing с булевым значением для проверки количества времени до снятия лота, ключ times со значением количества целых часов и минут до даты окончания аукциона
+ */
+function get_date(string $date_ad): array
+{
+    $date_today = date("Y-m-d H:i");
+    $interval = strtotime($date_ad) - strtotime($date_today);
+    $hours = floor($interval / 3600);
+    $time_in_hours = str_pad($hours, 2, "0", STR_PAD_LEFT);
+    $minutes = floor(($interval - ($time_in_hours * 3600)) / 60);
+    $time_in_minutes = str_pad($minutes, 2, "0", STR_PAD_LEFT);
+    if ($time_in_hours < 1) {
+        $timer_finishing = 1;
+    }
+    else {
+        $timer_finishing = 0;
+    }
+    $period = [
+        "is_finishing" => "$timer_finishing",
+        "times" => "$time_in_hours:$time_in_minutes",
+    ];
+    return $period;
+}
 
+/**
+ * добавляет к цене ' ₽', в случае стоимости от 1000 устанавливает разделитель тысяч
+ * @param string $price цена товара, введенная пользователем
+ * @return string цена товара для объявления
+ */
+function get_price(string $price): string
+{
+    if ($price >= 1000) {
+        return number_format($price, 0, '', ' ') . ' ₽';
+    }
+    return $price . ' ₽';
+}
