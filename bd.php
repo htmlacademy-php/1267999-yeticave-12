@@ -4,8 +4,7 @@ $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
 /**
  * @return array двумерный ассоциативный массив из базы данных с названиями и символьным кодом категорий
  */
-function get_categories() {
-    global $con;
+function get_categories($con) {
     $sql_category = "SELECT title, cod FROM category";
     $result_category = mysqli_query($con, $sql_category);
     $categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
@@ -15,9 +14,8 @@ function get_categories() {
 /**
  * @return array двумерный ассоциативный массив из базы данных для отображения лотов на главной странице
  */
-function get_ads(): array
+function get_ads($con): array
 {
-    global $con;
     $sql_ads = "SELECT lot.id as id, name, title as category, price_rate as price, image as url, date_completion as calculation_date FROM category
     INNER JOIN lot ON category.id = lot.id_category
     INNER JOIN rate ON lot.id = rate.id_lot
@@ -31,9 +29,8 @@ function get_ads(): array
 /**
  * @return array двумерный ассоциативный массив из базы данных для отображения id лотов
  */
-function get_lots(): array
+function get_lots($con): array
 {
-    global $con;
     $lot_sql = "SELECT lot.id FROM lot";
     $result_lot = mysqli_query($con, $lot_sql);
     $lots = mysqli_fetch_all($result_lot, MYSQLI_ASSOC);
@@ -45,9 +42,8 @@ function get_lots(): array
  * @return array  ассоциативный массив из базы данных для отображения карточки лота
  */
 
-function get_ads_lot(int $lot_id): array
+function get_ads_lot(int $lot_id, $con): array
 {
-    global $con;
     $sql = "SELECT lot.id as id, title as category, name, image as url, description, date_completion as calculation_date FROM lot
         INNER JOIN category ON lot.id_category = category.id
         WHERE lot.id = ?";
