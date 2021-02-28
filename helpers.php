@@ -180,3 +180,144 @@ function get_price(string $price): string
     }
     return $price . ' ₽';
 }
+
+/**
+ * возвращает название поля при отправке формы, иначе пустую строку
+ */
+function getPostVal($name)
+{
+    return $_POST[$name] ?? "";
+}
+
+/**
+ * валидация поля с ценой (целое число больше ноля)
+ */
+function validatePrice($name)
+{
+    $value = $_POST[$name];
+    if (ctype_digit($value)) {
+        $isPriceValid = "";
+    }
+    else {
+        $isPriceValid = "Содержимое поля должно быть целым числом больше ноля";
+    }
+    return $isPriceValid;
+}
+
+/**
+ * валидация даты (указанная дата должна быть больше текущей даты, хотя бы на один день)
+ */
+function validateDate()
+{
+    $date = $_POST['lot-date'];
+    $array = explode('-', $date);
+    $year = $array[0];
+    $month = $array[1];
+    $day = $array[2];
+    if (empty($array[0])) {
+        $isDateValid = "Введите дату";
+    }
+    else {
+        $isDateValid = checkdate($month, $day, $year);
+        if ($isDateValid) {
+            $date_today = date("Y-m-d");
+            $interval = strtotime($date) - strtotime($date_today);
+            if ($interval > 0) {
+                $isDateValid = "";
+            }
+            else {
+                $isDateValid = "Указанная дата должна быть больше текущей даты, хотя бы на один день";
+            }
+        }
+        else {
+            $isDateValid = "Указанная дата должна быть больше текущей даты, хотя бы на один день";
+        }
+    }
+    return $isDateValid;
+}
+
+/**
+ * валидация длины заполненного поля
+ */
+function isCorrectLength($name, $min, $max)
+{
+    $len = strlen($_POST[$name]);
+
+    if ($len < $min or $len > $max) {
+        return "Значение должно быть от $min до $max символов";
+    }
+}
+
+/**
+ * валидация изображения лота (изображение в формате jpg, jpeg, png, максимальный размер файла: 2 МБ)
+ */
+function validateFile()
+{
+    if (isset($_FILES['file'])) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_name = $_FILES['file']['tmp_name'];
+        $file_size = $_FILES['file']['size'];
+        if (empty($file_name)) {
+            return "Загрузите изображение в формате jpg, jpeg, png";
+        }
+        else {
+            $file_type = finfo_file($finfo, $file_name);
+            if ($file_type !== 'image/jpeg') {
+                return "Загрузите изображение в формате jpg, jpeg, png";
+            }
+            if ($file_size > 2000000) {
+                return "Максимальный размер файла: 2 МБ";
+            }
+        }
+    }
+}
+
+/**
+ * валидация поля по выбору категории
+ */
+function validateCategory($id_category_lot)
+{
+    if (isset($_POST['category'])) {
+        if (empty($id_category_lot)) {
+            return "Введите название категории";
+        } else {
+            return "";
+        }
+    }
+}
+
+/**
+ * возвращает название категории при отправке формы, иначе пустую строку
+ */
+function getPostCat()
+{
+    return $_POST['category'] ?? "Выберите категорию";
+}
+
+/**
+ * массив с общими ошибками валидации по добавлению объявления
+ */
+function get_errors ($error_file, $error_category, $errors_rules)
+{
+    $errors_rules['file'] = $error_file;
+    $errors_rules['category'] = $error_category;
+    return $errors_rules;
+}
+
+/**
+ * сохраняет отправленный файл, возвращает url adress
+ */
+function save_file($errors)
+{
+    if (empty($errors)) {
+        if (isset($_FILES['file'])) {
+            $file_name = $_FILES['file']['name'];
+            $file_path = __DIR__ . '/uploads/';
+            $file_url = 'uploads/' . $file_name;
+            move_uploaded_file($_FILES['file']['tmp_name'], $file_path . $file_name);
+            return $file_url;
+        }
+    }
+}
+
+
