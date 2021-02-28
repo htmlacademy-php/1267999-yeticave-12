@@ -262,7 +262,7 @@ function validateFile()
         }
         else {
             $file_type = finfo_file($finfo, $file_name);
-            if ($file_type !== 'image/jpeg') {
+            if (($file_type !== 'image/jpeg') and ($file_type !== 'image/png')) {
                 return "Загрузите изображение в формате jpg, jpeg, png";
             }
             if ($file_size > 2000000) {

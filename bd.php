@@ -56,12 +56,15 @@ function get_ads_lot(int $lot_id, $con): array
 }
 
 /**
- * id лота по наименованию категории
+ * id категории по наименованию категории
  */
 function get_category_lot ($con, $category)
 {
-    $sql = "SELECT id FROM category WHERE title = '$category'";
-    $res = mysqli_query($con, $sql);
+    $sql = "SELECT id FROM category WHERE title = ?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $category);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
     $cat = mysqli_fetch_assoc($res);
     return $cat;
 }

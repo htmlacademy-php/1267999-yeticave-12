@@ -30,6 +30,7 @@ foreach ($_POST as $key => $value) {
     }
 }
 $error_file = validateFile();
+print_r($error_file);
 $errors_rules = array_filter($errors_rules);
 $errors = get_errors($error_file, $error_category, $errors_rules);
 $errors = array_filter($errors);
@@ -42,9 +43,10 @@ $errors_lot_step_class = empty($errors['lot-step']) ? "" : " form__item--invalid
 $errors_lot_date_class = empty($errors['lot-date']) ? "" : " form__item--invalid";
 $errors_file_class = empty($errors['file']) ? "" : " form__item--invalid";
 $errors_category_class = empty($errors['category']) ? "" : " form__item--invalid";
-$add_sql_lot = get_sql_lot($con, $id_category_lot, $lot_url);
+//$add_sql_lot = get_sql_lot($con, $id_category_lot, $lot_url);
 
-if (empty($errors)) {
+if (empty($errors) and $_SERVER['REQUEST_METHOD'] == 'POST') {
+    get_sql_lot($con, $id_category_lot, $lot_url);
     $last_lot = get_lots($con);
     $last_lot = array_key_last($last_lot) + 1;
     header("Location: lot.php?id=$last_lot");
