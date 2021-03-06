@@ -42,7 +42,7 @@
         <?php endforeach; ?>
       </ul>
     </nav>
-    <form class="form form--add-lot container<?= empty($errors) ? "" : " form--invalid"; ?>" action="add.php" enctype="multipart/form-data" method="POST"> <!-- form--invalid -->
+    <form class="form form--add-lot container<?= empty($errors) ? "" : " form--invalid"; ?>" action="add.php" enctype="multipart/form-data" method="post"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two">
         <div class="form__item<?= empty($errors['lot-name']) ? "" : " form__item--invalid"; ?>"> <!-- form__item--invalid -->

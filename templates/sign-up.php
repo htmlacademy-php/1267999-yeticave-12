@@ -16,7 +16,7 @@
       <a class="main-header__logo" href="index.html">
         <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
       </a>
-      <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
+      <form class="main-header__search" method="get" action="registration.php" autocomplete="off">
         <input type="search" name="search" placeholder="Поиск лота">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
@@ -37,48 +37,36 @@
   <main>
     <nav class="nav">
       <ul class="nav__list container">
+        <?php foreach ($categories as $category): ?>
         <li class="nav__item">
-          <a href="all-lots.html">Доски и лыжи</a>
+          <a href="all-lots.html"><?= $category['title']; ?></a>
         </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Разное</a>
-        </li>
+        <?php endforeach; ?>
       </ul>
     </nav>
-    <form class="form container form--invalid" action="https://echo.htmlacademy.ru" method="post" autocomplete="off"> <!-- form
-    --invalid -->
+    <form class="form container<?= empty($errors) ? "" : " form--invalid"; ?>" action="registration.php" method="post" enctype="multipart/form-data" autocomplete="off"> <!-- form --invalid -->
       <h2>Регистрация нового аккаунта</h2>
-      <div class="form__item"> <!-- form__item--invalid -->
+      <div class="form__item<?= empty($errors['email'] || $errors['email_repeat']) ? "" : " form__item--invalid"; ?>"> <!-- form__item--invalid -->
         <label for="email">E-mail <sup>*</sup></label>
-        <input id="email" type="text" name="email" placeholder="Введите e-mail">
-        <span class="form__error">Введите e-mail</span>
+        <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= get_post_val($registration['email']); ?>">
+        <span class="form__error"><?= $errors['email'] ?? ""; ?></span>
+        <span class="form__error"><?= $errors['email_repeat'] ?? ""; ?></span>
       </div>
-      <div class="form__item">
+      <div class="form__item<?= empty($errors['password']) ? "" : " form__item--invalid"; ?>">
         <label for="password">Пароль <sup>*</sup></label>
         <input id="password" type="password" name="password" placeholder="Введите пароль">
-        <span class="form__error">Введите пароль</span>
+        <span class="form__error"><?= $errors['password'] ?? ""; ?></span>
+        <span class="form__error"><?= $errors['password_length'] ?? ""; ?></span>
       </div>
-      <div class="form__item">
+      <div class="form__item<?= empty($errors['name']) ? "" : " form__item--invalid"; ?>">
         <label for="name">Имя <sup>*</sup></label>
-        <input id="name" type="text" name="name" placeholder="Введите имя">
-        <span class="form__error">Введите имя</span>
+        <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= get_post_val($registration['name']); ?>">
+        <span class="form__error"><?= $errors['name'] ?? ""; ?></span>
       </div>
-      <div class="form__item">
+      <div class="form__item<?= empty($errors['message']) ? "" : " form__item--invalid"; ?>">
         <label for="message">Контактные данные <sup>*</sup></label>
-        <textarea id="message" name="message" placeholder="Напишите как с вами связаться"></textarea>
-        <span class="form__error">Напишите как с вами связаться</span>
+        <textarea id="message" name="message" placeholder="Напишите как с вами связаться"><?= get_post_val($registration['message']); ?></textarea>
+        <span class="form__error"><?= $errors['message'] ?? ""; ?></span>
       </div>
       <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
       <button type="submit" class="button">Зарегистрироваться</button>
@@ -91,24 +79,11 @@
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
+      <?php foreach ($categories as $category): ?>
       <li class="nav__item">
-        <a href="all-lots.html">Доски и лыжи</a>
+        <a href="all-lots.html"><?= $category['title']; ?></a>
       </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Крепления</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Ботинки</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Одежда</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Инструменты</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Разное</a>
-      </li>
+      <?php endforeach; ?>
     </ul>
   </nav>
   <div class="main-footer__bottom container">

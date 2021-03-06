@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = array_filter($errors);
     $lot_url = save_file($errors, $lot_file);
     if (empty($errors)) {
-        $stmt = db_get_prepare_stmt($con, $lot_bd, $data = [$lot_category_id, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
+        $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [$lot_category_id, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
         mysqli_stmt_execute($stmt);
         $last_lot = get_lots($con);
         $last_lot = array_key_last($last_lot) + 1;
