@@ -5,7 +5,7 @@ $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
  * @return array двумерный ассоциативный массив из базы данных с названиями и символьным кодом категорий
  */
 function get_categories($con) {
-    $sql_category = "SELECT title, cod FROM category";
+    $sql_category = "SELECT * FROM category";
     $result_category = mysqli_query($con, $sql_category);
     $categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
     return $categories;
@@ -55,35 +55,4 @@ function get_ads_lot(int $lot_id, $con): array
     return $ads_lot;
 }
 
-/**
- * id категории по наименованию категории
- */
-function get_category_lot ($con, $category)
-{
-    $sql = "SELECT id FROM category WHERE title = ?";
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, 's', $category);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    $cat = mysqli_fetch_assoc($res);
-    return $cat;
-}
-
-/**
- * формирует sql запрос на добавление в БД информации о созданном лоте
- */
-function get_sql_lot($con, $id_category_lot, $lot_url)
-{
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $date_creation = date("Y-m-d H:i:s");
-        $name = $_POST['lot-name'];
-        $description = $_POST['message'];
-        $price_starting = $_POST['lot-rate'];
-        $date_completion = $_POST['lot-date'];
-        $step_rate = $_POST['lot-step'];
-        $sql = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, 2, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, 'issssisi', $id_category_lot, $date_creation, $name, $description, $lot_url, $price_starting, $date_completion, $step_rate);
-        return mysqli_stmt_execute($stmt);
-    }
-}
+$lot_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, 2, ?, ?, ?, ?, ?, ?, ?)";

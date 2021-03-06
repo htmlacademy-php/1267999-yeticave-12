@@ -42,31 +42,31 @@
         <?php endforeach; ?>
       </ul>
     </nav>
-    <form class="form form--add-lot container<?= $errors_form; ?>" action="add.php" enctype="multipart/form-data" method="POST"> <!-- form--invalid -->
+    <form class="form form--add-lot container<?= empty($errors) ? "" : " form--invalid"; ?>" action="add.php" enctype="multipart/form-data" method="POST"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two">
-        <div class="form__item<?= $errors_lot_class; ?>"> <!-- form__item--invalid -->
+        <div class="form__item<?= empty($errors['lot-name']) ? "" : " form__item--invalid"; ?>"> <!-- form__item--invalid -->
           <label for="lot-name">Наименование <sup>*</sup></label>
-          <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?= getPostVal('lot-name'); ?>">
+          <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?= get_post_val($lot['name']); ?>">
           <span class="form__error"><?= $errors['lot-name'] ?? ""; ?></span>
         </div>
-        <div class="form__item<?= $errors_category_class; ?>">
+        <div class="form__item<?= empty($errors['category']) ? "" : " form__item--invalid"; ?>">
           <label for="category">Категория <sup>*</sup></label>
-          <select id="category" name="category">
-            <option><?= getPostCat(); ?></option>
+          <select id="category" name="category" >
+            <option><?= get_post_category($lot['category']); ?></option>
             <?php foreach ($categories as $category): ?>
-            <option><?= $category['title']; ?></option>
+            <option id="<?= $category['id']; ?>"><?= $category['title']; ?></option>
             <?php endforeach; ?>
           </select>
           <span class="form__error"><?= $errors['category'] ?? ""; ?></span>
         </div>
       </div>
-      <div class="form__item form__item--wide<?= $errors_message_class; ?>">
+      <div class="form__item form__item--wide<?= empty($errors['message']) ? "" : " form__item--invalid"; ?>">
         <label for="message">Описание <sup>*</sup></label>
-        <textarea id="message" name="message" placeholder="Напишите описание лота"><?= getPostVal('message'); ?></textarea>
+        <textarea id="message" name="message" placeholder="Напишите описание лота"><?= get_post_val($lot['message']); ?></textarea>
         <span class="form__error"><?= $errors['message'] ?? ""; ?></span>
       </div>
-      <div class="form__item form__item--file<?= $errors_file_class; ?>">
+      <div class="form__item form__item--file<?= empty($errors['file']) ? "" : " form__item--invalid"; ?>">
         <label>Изображение <sup>*</sup></label>
         <div class="form__input-file">
           <input class="visually-hidden" type="file" id="lot-img" name = "file" value="">
@@ -77,19 +77,19 @@
         <span class="form__error"><?= $errors['file'] ?? ""; ?></span>
       </div>
       <div class="form__container-three">
-        <div class="form__item form__item--small<?= $errors_lot_rate_class; ?>">
+        <div class="form__item form__item--small<?= empty($errors['lot-rate']) ? "" : " form__item--invalid"; ?>">
           <label for="lot-rate">Начальная цена <sup>*</sup></label>
-          <input id="lot-rate" type="text" name="lot-rate" placeholder="0" value="<?= getPostVal('lot-rate'); ?>">
+          <input id="lot-rate" type="text" name="lot-rate" placeholder="0" value="<?= get_post_val($lot['rate']); ?>">
           <span class="form__error"><?= $errors['lot-rate'] ?? ""; ?></span>
         </div>
-        <div class="form__item form__item--small<?= $errors_lot_step_class; ?>">
+        <div class="form__item form__item--small<?= empty($errors['lot-step']) ? "" : " form__item--invalid"; ?>">
           <label for="lot-step">Шаг ставки <sup>*</sup></label>
-          <input id="lot-step" type="text" name="lot-step" placeholder="0" value="<?= getPostVal('lot-step'); ?>">
+          <input id="lot-step" type="text" name="lot-step" placeholder="0" value="<?= get_post_val($lot['step']); ?>">
           <span class="form__error"><?= $errors['lot-step']; ?></span>
         </div>
-        <div class="form__item<?= $errors_lot_date_class; ?>">
+        <div class="form__item<?= empty($errors['lot-date']) ? "" : " form__item--invalid"; ?>">
           <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
-          <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= getPostVal('lot-date'); ?>">
+          <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= get_post_val($lot['date']); ?>">
           <span class="form__error"><?= $errors['lot-date']; ?></span>
         </div>
       </div>
