@@ -2,53 +2,67 @@
 require_once ('helpers.php');
 require_once ('bd.php');
 
+
 $categories = get_categories($con);
-$id_category_lot = get_category_lot($con, $_POST['category']);
-$error_category = validateCategory($id_category_lot);
-$errors_rules = [];
-$rules = [
-    'lot-name' => function() {
-        return isCorrectLength('lot-name', 5, 128);
-    },
-    'message' => function() {
-        return isCorrectLength('message', 20, 512);
-    },
-    'lot-rate' => function() {
-        return validatePrice('lot-rate');
-    },
-    'lot-step' => function() {
-        return validatePrice('lot-step');
-    },
-    'lot-date' => function() {
-        return validateDate();
-    }
-];
-foreach ($_POST as $key => $value) {
-    if (isset($rules[$key])) {
-        $rule = $rules[$key];
-        $errors_rules[$key] = $rule();
-    }
-}
-$error_file = validateFile();
-$errors_rules = array_filter($errors_rules);
-$errors = get_errors($error_file, $error_category, $errors_rules);
-$errors = array_filter($errors);
-$errors_form = empty($errors) ? "" : " form--invalid";
-$lot_url = save_file($errors);
-$errors_lot_class = empty($errors['lot-name']) ? "" : " form__item--invalid";
-$errors_message_class = empty($errors['message']) ? "" : " form__item--invalid";
-$errors_lot_rate_class = empty($errors['lot-rate']) ? "" : " form__item--invalid";
-$errors_lot_step_class = empty($errors['lot-step']) ? "" : " form__item--invalid";
-$errors_lot_date_class = empty($errors['lot-date']) ? "" : " form__item--invalid";
-$errors_file_class = empty($errors['file']) ? "" : " form__item--invalid";
-$errors_category_class = empty($errors['category']) ? "" : " form__item--invalid";
-$add_sql_lot = get_sql_lot($con, $id_category_lot, $lot_url);
 
-if (empty($errors)) {
-    $last_lot = get_lots($con);
-    $last_lot = array_key_last($last_lot) + 1;
-    header("Location: lot.php?id=$last_lot");
-}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $lot = [
+        'name' => $_POST['lot-name'],
+        'category' => $_POST['category'],
+        'message' => $_POST['message'],
+        'file' => $_FILES['file'],
+        'rate' => $_POST['lot-rate'],
+        'step' => $_POST['lot-step'],
+        'date' => $_POST['lot-date']
+    ];
 
-$add_lot_content = include_template('add_lot.php', ['categories' => $categories, 'errors' => $errors, 'errors_form' => $errors_form, 'errors_lot_class' => $errors_lot_class, 'errors_message_class' => $errors_message_class, 'errors_lot_rate_class' => $errors_lot_rate_class, 'errors_lot_step_class' => $errors_lot_step_class, 'errors_lot_date_class' => $errors_lot_date_class, 'errors_file_class' => $errors_file_class, 'errors_category_class' => $errors_category_class]);
+    $lot_name = $lot['name'];
+    $lot_category = $lot['category'];
+    $lot_message = $lot['message'];
+    $lot_file = $lot['file'];
+    $lot_rate = $lot['rate'];
+    $lot_step = $lot['step'];
+    $lot_date = $lot['date'];
+    $lot_category_id = category_id_post($categories, $lot_category);
+    $date_creation = date("Y-m-d H:i:s");
+    $date_valid_separator = is_date_valid($lot_date);
+    $errors = [];
+    $rules = [
+        'lot-name' => function($lot_name) {
+            return validate_correct_length($lot_name, 5, 128);
+        },
+        'message' => function($lot_message) {
+            return validate_correct_length($lot_message, 20, 512);
+        },
+        'lot-rate' => function($lot_rate) {
+            return validate_price($lot_rate);
+        },
+        'lot-step' => function($lot_step) {
+            return validate_price($lot_step);
+        },
+    ];
+    foreach ($_POST as $key => $value) {
+        if (isset($rules[$key])) {
+            $rule = $rules[$key];
+            $errors[$key] = $rule($value);
+        }
+    }
+    $error_category = validate_category($categories, $lot_category);
+    $error_file = validate_file($lot_file);
+    $error_date = validate_date($lot_date, $date_valid_separator);
+
+    $errors = get_errors ($error_file, $error_category, $error_date, $errors);
+    $errors = array_filter($errors);
+    $lot_url = save_file($errors, $lot_file);
+    if (empty($errors)) {
+        $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [$lot_category_id, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
+        mysqli_stmt_execute($stmt);
+        $last_lot = get_lots($con);
+        $last_lot = array_key_last($last_lot) + 1;
+        header("Location: lot.php?id=$last_lot");
+    }
+    $add_lot_content = include_template('add_lot.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
+} else {
+    $add_lot_content = include_template('add_lot.php', ['categories' => $categories]);
+}
 print($add_lot_content);
