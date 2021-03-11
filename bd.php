@@ -5,7 +5,7 @@ $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
  * @return array двумерный ассоциативный массив из базы данных с названиями и символьным кодом категорий
  */
 function get_categories($con) {
-    $sql_category = "SELECT * FROM category";
+    $sql_category = "SELECT id, title, cod FROM category";
     $result_category = mysqli_query($con, $sql_category);
     $categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
     return $categories;

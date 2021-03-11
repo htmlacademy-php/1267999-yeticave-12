@@ -182,8 +182,8 @@ function get_price(string $price): string
 }
 
 /**
- * @param string $value значение глобального супермассива POST по ключу
- * @return string если true - возвращает значение глобального массива Post по ключу. если false - пустую строку
+ * @param string $value значение суперглобального массива POST по ключу
+ * @return string если true - возвращает значение суперглобального массива Post по ключу. если false - пустую строку
  */
 function get_post_val($value)
 {
@@ -192,7 +192,7 @@ function get_post_val($value)
 
 /**
  * @param array $categories массив категорий из БД
- * @param string $lot_category категория лота из глобального супермассива POST
+ * @param string $lot_category категория лота из суперглобального массива POST
  * @return false|int|string id категории лота
  */
 function category_id_post($categories, $lot_category) {
@@ -205,11 +205,11 @@ function category_id_post($categories, $lot_category) {
 
 /**
  * @param array $categories массив категорий из БД
- * @param string $lot_category категория лота из глобального супермассива POST
- * @return string валидация категории лота глобального массива POST если введено значение возвращает пустую строку, если нет ошибку валидации
+ * @param string $lot_category категория лота из суперглобального массива POST
+ * @return string валидация категории лота суперглобального массива POST если введено значение возвращает пустую строку, если нет ошибку валидации
  */
 function validate_category($categories, $lot_category) {
-    $id_categories = in_array("$lot_category", array_column($categories, 'title'));
+    $id_categories = in_array($lot_category, array_column($categories, 'title'));
     if (empty($id_categories)) {
         return "Введите название категории";
     } else {
@@ -218,7 +218,7 @@ function validate_category($categories, $lot_category) {
 }
 
 /**
- * @param mixed $lot_file значение глобального супермассива FILE лота
+ * @param mixed $lot_file значение суперглобального массива FILE лота
  * @return string валидация загруженного файла лота если файл удовлетворяет условиям возвращает пустую строку, если нет ошибку валидации
  */
 function validate_file($lot_file)
@@ -243,7 +243,7 @@ function validate_file($lot_file)
 }
 
 /**
- * @param string $value значение глобального супермассива POST по ключу
+ * @param string $value значение суперглобального массива POST по ключу
  * @param int $min минимальное значение количества символов в строке для валидации
  * @param int $max максимальное значение количества символов в строке для валидации
  * @return string валидация длины строки по параметрам
@@ -256,21 +256,17 @@ function validate_correct_length($value, $min, $max) {
 }
 
 /**
- * @param string $value значение глобального супермассива POST по ключу
+ * @param string $value значение суперглобального массива POST по ключу
  * @return string валидация строки по параметрам (целое число больше 0)
  */
 function validate_price($value) {
-    if (ctype_digit($value)) {
-        $isPriceValid = "";
+    if (!ctype_digit($value)) {
+        return "Содержимое поля должно быть целым числом больше ноля";
     }
-    else {
-        $isPriceValid = "Содержимое поля должно быть целым числом больше ноля";
-    }
-    return $isPriceValid;
 }
 
 /**
- * @param mixed $lot_date значение глобального супермассива POST (время окончания объявления)
+ * @param mixed $lot_date значение суперглобального массива POST (время окончания объявления)
  * @param bool $date_valid_separator проверка даты на регламент
  * @return string валидация даты (больше текущей даты)
  */
@@ -307,7 +303,7 @@ function get_errors($error_file, $error_category, $error_date, $errors)
 
 /**
  * @param mixed $errors ошибки валидации
- * @param mixed $lot_file значение глобального супермассива POST (время окончания объявления)
+ * @param mixed $lot_file значение суперглобального массива POST (время окончания объявления)
  * @return string сохраняет отправленный файл, возвращает url adress
  */
 function save_file($errors, $lot_file)
@@ -322,8 +318,8 @@ function save_file($errors, $lot_file)
 }
 
 /**
- * @param string $lot_category значение глобального супермассива POST по ключу категории
- * @return string если true - возвращает значение глобального массива Post по ключу категории. если false - Выберите категорию
+ * @param string $lot_category значение суперглобального массива POST по ключу категории
+ * @return string если true - возвращает значение суперглобального массива Post по ключу категории. если false - Выберите категорию
  */
 function get_post_category($lot_category)
 {
@@ -331,20 +327,18 @@ function get_post_category($lot_category)
 }
 
 /**
- * @param string $email значение глобального супермассива POST по ключу email
+ * @param string $email значение суперглобального массива POST по ключу email
  * @return string если валидация прошла успешно - пустую строку. если нет - ошибку валидации
  */
 function email_validate($email) {
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return "";
-    } else {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Введите e-mail";
     }
 }
 
 /**
- * @param string $password значение глобального супермассива POST по ключу password
- * @return string если true - возвращает значение глобального массива Post по ключу password. если false - Введите пароль
+ * @param string $password значение суперглобального массива POST по ключу password
+ * @return string если true - возвращает значение суперглобального массива Post по ключу password. если false - Введите пароль
  */
 function validate_password($password) {
     return $password ?? "Введите пароль";
@@ -352,14 +346,12 @@ function validate_password($password) {
 
 /**
  * @param mixed $users ассоциативный массив из БД users
- * @param string $email значение глобального супермассива POST по ключу email
+ * @param string $email значение суперглобального массива POST по ключу email
  * @return string если в БД нет повторяющего значения - пустая строка, если есть - ошибка валидации
  */
 function validate_email($users, $email) {
     $email_repeat = in_array("$email", array_column($users, 'email'));
-    if (!$email_repeat) {
-        return "";
-    } else {
+    if ($email_repeat) {
         return "Указанный email - '$email' уже используется другим пользователем";
     }
 }

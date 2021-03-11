@@ -32,9 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     ];
     foreach ($_POST as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errors[$key] = $rule($value);
+        if (array_key_exists($key, $rules)) {
+            $errors[$key] = $rules[$key]($value);
         }
     }
     $password_validate_length = validate_correct_length($password, 5, 128);
