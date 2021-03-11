@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once ('helpers.php');
 require_once ('bd.php');
 
@@ -52,14 +53,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = get_errors ($error_file, $error_category, $error_date, $errors);
     $errors = array_filter($errors);
     $lot_url = save_file($errors, $lot_file);
+    $user_name = $_SESSION['name'];
+    $users = get_users($con);
+    $id_user_lot = get_id_user_lot($users, $user_name);
     if (empty($errors)) {
-        $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [$lot_category_id, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
+        $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [$lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
         mysqli_stmt_execute($stmt);
         $last_lot = mysqli_insert_id($con);
         header("Location: lot.php?id=$last_lot");
     }
     $add_lot_content = include_template('add_lot.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
 } else {
-    $add_lot_content = include_template('add_lot.php', ['categories' => $categories]);
+    $add_lot_content = include_template('save_lot.php', ['categories' => $categories]);
 }
-print($add_lot_content);
+if (!$_SESSION['name']) {
+    http_response_code(403);
+} else {
+    print($add_lot_content);
+}

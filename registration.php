@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('helpers.php');
 require_once ('bd.php');
 $categories = get_categories($con);
@@ -22,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return email_validate($email);
         },
         'password' => function($password) {
-            return validate_password($password);
+            return validate_correct_length($password, 5, 128);
         },
         'name' => function($name) {
             return validate_correct_length($name, 5, 128);
@@ -36,21 +37,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$key] = $rules[$key]($value);
         }
     }
-    $password_validate_length = validate_correct_length($password, 5, 128);
-    $errors['password_length'] = $password_validate_length;
     $users = get_users($con);
-
     $errors['email_repeat'] = validate_email($users, $email);
     $errors = array_filter($errors);
     $hash = password_hash($password, PASSWORD_DEFAULT);
     if (empty($errors)) {
-        $stmt = db_get_prepare_stmt($con, $users_bd, $data= [$date_registration, $email, $name, $password, $message]);
+        $stmt = db_get_prepare_stmt($con, $users_bd, $data= [$date_registration, $email, $name, $hash, $message]);
         mysqli_stmt_execute($stmt);
-        header("Location: registration.php");
+        header("Location: login.php");
     }
-    $user_registration = include_template('sign-up.php', ['categories' => $categories, 'errors' => $errors, 'registration' => $registration]);
+    $user_registration = include_template('sign_up.php', ['categories' => $categories, 'errors' => $errors, 'registration' => $registration]);
 } else {
-    $user_registration = include_template('sign-up.php', ['categories' => $categories]);
+    $user_registration = include_template('sign_up.php', ['categories' => $categories]);
 }
-print($user_registration);
-
+if ($_SESSION['name']) {
+    http_response_code(403);
+} else {
+    print($user_registration);
+}

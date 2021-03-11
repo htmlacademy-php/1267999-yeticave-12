@@ -337,14 +337,6 @@ function email_validate($email) {
 }
 
 /**
- * @param string $password значение суперглобального массива POST по ключу password
- * @return string если true - возвращает значение суперглобального массива Post по ключу password. если false - Введите пароль
- */
-function validate_password($password) {
-    return $password ?? "Введите пароль";
-}
-
-/**
  * @param mixed $users ассоциативный массив из БД users
  * @param string $email значение суперглобального массива POST по ключу email
  * @return string если в БД нет повторяющего значения - пустая строка, если есть - ошибка валидации
@@ -354,4 +346,51 @@ function validate_email($users, $email) {
     if ($email_repeat) {
         return "Указанный email - '$email' уже используется другим пользователем";
     }
+}
+
+/**
+ * @param mixed $users ассоциативный массив из БД users
+ * @param string $user_name имя залогиненного пользователя, прошедшего авторизацию
+ * @return int id пользователя, добавившего объявление
+ */
+function get_id_user_lot($users, $user_name) {
+    if ($user_name) {
+        $array_user_name = array_column($users, 'name');
+        $array_id_user = array_column($users, 'id');
+        $array_users = array_combine($array_user_name, $array_id_user);
+        $id_user_lot = $array_users[$user_name];
+        return $id_user_lot;
+    }
+}
+
+/**
+ * @param mixed $users ассоциативный массив из БД users
+ * @param mixed $password пароль пользователя при  авторизации
+ * @param string $email email пользователя при  авторизации
+ * @return string если пользователь найден пустая строка, в противном ошибку
+ */
+function password_verification($users, $password, $email) {
+    if ($password && $email) {
+        $array_email = array_column($users, 'email');
+        $array_password = array_column($users, 'password');
+        $array_users = array_combine($array_email, $array_password);
+        $hash_password_user = $array_users[$email];
+        $password_validate = password_verify($password, $hash_password_user);
+        if (!$password_validate) {
+            return "По email '$email' не найден пользователь с паролем '$password' , проверьте правильность ввода email или пароля";
+        }
+    }
+}
+
+/**
+ * @param mixed $users ассоциативный массив из БД users
+ * @param string $email email пользователя при  авторизации
+ * @return string имя пользователя, прошедшего авторизацию
+ */
+function get_user_name($users, $email) {
+    $array_email = array_column($users, 'email');
+    $array_name = array_column($users, 'name');
+    $array_users = array_combine($array_email, $array_name);
+    $user_name = $array_users[$email];
+    return $user_name;
 }

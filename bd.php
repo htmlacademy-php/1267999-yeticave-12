@@ -59,12 +59,12 @@ function get_ads_lot(int $lot_id, $con): array
  * @return array ассоциативный массив из базы данных для регистрации пользователя
  */
 function get_users($con) {
-    $sql_users = "SELECT * FROM user";
+    $sql_users = "SELECT id, date_registration, email, name, password, contacts FROM user";
     $result_users = mysqli_query($con, $sql_users);
     $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
     return $users;
 }
 
-$lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, 2, ?, ?, ?, ?, ?, ?, ?)";
+$lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $users_bd = "INSERT INTO user (date_registration, email, name, password, contacts) VALUES (?, ?, ?, ?, ?)";
