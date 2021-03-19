@@ -1,11 +1,5 @@
 <?php
-session_start();
-require_once ('helpers.php');
-require_once ('bd.php');
-
-$categories = get_categories($con);
-$is_auth = rand(0, 1);
-$user_name = 'Konstantin';
+require_once('init.php');
 $ads = get_ads($con);
 foreach ($ads as $key => $value) {
     $date_completion = get_date($value['calculation_date'])['times'];
@@ -13,6 +7,6 @@ foreach ($ads as $key => $value) {
     $ads[$key]['calculation_date'] = $date_completion;
     $ads[$key]['lot_timer'] = $lot_timer;
 }
-$main_content = include_template('main.php', ['ads' => $ads, 'categories' => $categories]);
-$layout_content = include_template('layout.php', ['content' => $main_content, 'title' => 'Yeticave - Главная', 'categories' => $categories]);
+$main_content = include_template('index_template.php', ['ads' => $ads, 'categories' => $categories]);
+$layout_content = include_template('index_layout.php', ['content' => $main_content, 'title' => 'Yeticave - Главная', 'categories' => $categories, 'user' => $_SESSION]);
 print($layout_content);

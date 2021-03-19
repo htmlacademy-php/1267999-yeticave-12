@@ -5,18 +5,18 @@ CREATE DATABASE yeticave
 
 CREATE TABLE `yeticave`.`category` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(128) NOT NULL,
-  `cod` VARCHAR(128) NOT NULL,
+  `title` VARCHAR(256) NOT NULL,
+  `code` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `yeticave`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `date_registration` TIMESTAMP NOT NULL,
-  `email` VARCHAR(128) NOT NULL,
-  `name` VARCHAR(128) NOT NULL,
+  `email` VARCHAR(256) NOT NULL,
+  `name` VARCHAR(256) NOT NULL,
   `password` VARCHAR(256) NOT NULL,
-  `contacts` VARCHAR(512) NOT NULL,
+  `contacts` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -25,8 +25,8 @@ CREATE TABLE `yeticave`.`lot` (
   `id_category` INT NOT NULL,
   `id_user_create` INT NOT NULL,
   `date_creation` TIMESTAMP NOT NULL,
-  `name` VARCHAR(128) NOT NULL,
-  `description` VARCHAR(512) NULL,
+  `name` VARCHAR(256) NOT NULL,
+  `description` VARCHAR(256) NULL,
   `image` VARCHAR(256) NULL,
   `price_starting` DECIMAL(10,0) NOT NULL,
   `date_completion` TIMESTAMP NOT NULL,

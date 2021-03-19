@@ -20,10 +20,10 @@
                     </form>
                     <a class="main-header__add-lot button" href="add_lot.php">Добавить лот</a>
                     <nav class="user-menu">
-                    <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
-                    <?php if ($_SESSION['name']): ?>
+                        <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
+                        <?php if ($user['name']): ?>
                         <div class="user-menu__logged">
-                            <p><?= $_SESSION['name'] ?></p>
+                            <p><?= $user['name']; ?></p>
                             <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
                             <a class="user-menu__logout" href="logout.php">Выход</a>
                         </div>
@@ -40,18 +40,19 @@
                     </nav>
                 </div>
             </header>
-
-            <main class="container"><?= $content; ?></main>
+            <main class="container">
+                <?= $content; ?>
+            </main>
         </div>
         <footer class="main-footer">
             <nav class="nav">
                 <ul class="nav__list container">
-                    <!--заполните этот список из массива категорий-->
-                        <?php foreach ($categories as $category): ?>
-                        <li class="nav__item">
-                            <a href="pages/all-lots.html"><?= $category['title']; ?></a>
-                        </li>
-                        <?php endforeach; ?>
+                <!--заполните этот список из массива категорий-->
+                <?php foreach ($categories as $category): ?>
+                    <li class="nav__item">
+                        <a href="pages/all-lots.html"><?= $category['title']; ?></a>
+                    </li>
+                <?php endforeach; ?>
                 </ul>
             </nav>
             <div class="main-footer__bottom container">

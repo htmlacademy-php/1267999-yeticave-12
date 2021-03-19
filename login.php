@@ -1,8 +1,8 @@
 <?php
-session_start();
-require_once('helpers.php');
-require_once('bd.php');
-$categories = get_categories($con);
+require_once('init.php');
+if ($_SESSION) {
+    header("Location: index.php");
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $login = [
         'email' => $_POST['email'],
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return email_validate($email);
         },
         'password' => function($password) {
-            return validate_correct_length($password, 5, 128);
+            return validate_correct_length($password, MIN_VALUE, MAX_VALUE);
         }
     ];
     foreach ($_POST as $key => $value) {
@@ -25,14 +25,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     $users = get_users($con);
-    $errors['password_verification'] = password_verification($users, $password, $email);
+
+    $user_information = get_user_information($email, $con);
+    $user_password_hash = $user_information['password'];
+    $errors['password_verification'] = password_verification($user_information, $email, $password);
     $errors = array_filter($errors);
     if (empty($errors)) {
-        $_SESSION['name'] = get_user_name($users, $email);
+        $_SESSION['name'] = $user_information['name'];
+        $_SESSION['id'] = $user_information['id'];
         header("Location: index.php");
     }
-    $user_login = include_template('layout_login.php', ['categories' => $categories, 'errors' => $errors]);
+    $main_content = include_template('login_template.php', ['errors' => $errors]);
+    $user_login = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $_SESSION]);
 } else {
-    $user_login = include_template('layout_login.php', ['categories' => $categories]);
+    $main_content = include_template('login_template.php');
+    $user_login = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $_SESSION]);
 }
 print($user_login);

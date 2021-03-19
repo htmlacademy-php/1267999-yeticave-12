@@ -2,10 +2,65 @@
 $con = mysqli_connect("localhost", "mysql", "mysql", "yeticave");
 
 /**
+ * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return mysqli_stmt Подготовленное выражение
+ */
+function db_get_prepare_stmt($link, $sql, $data = []) {
+    $stmt = mysqli_prepare($link, $sql);
+
+    if ($stmt === false) {
+        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+        die($errorMsg);
+    }
+
+    if ($data) {
+        $types = '';
+        $stmt_data = [];
+
+        foreach ($data as $value) {
+            $type = 's';
+
+            if (is_int($value)) {
+                $type = 'i';
+            }
+            else if (is_string($value)) {
+                $type = 's';
+            }
+            else if (is_double($value)) {
+                $type = 'd';
+            }
+
+            if ($type) {
+                $types .= $type;
+                $stmt_data[] = $value;
+            }
+        }
+
+        $values = array_merge([$stmt, $types], $stmt_data);
+
+        $func = 'mysqli_stmt_bind_param';
+        $func(...$values);
+
+        if (mysqli_errno($link) > 0) {
+            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+            die($errorMsg);
+        }
+    }
+
+    return $stmt;
+}
+
+/**
  * @return array двумерный ассоциативный массив из базы данных с названиями и символьным кодом категорий
  */
-function get_categories($con) {
-    $sql_category = "SELECT id, title, cod FROM category";
+function get_categories($con)
+{
+    $sql_category = "SELECT id, title, code FROM category";
     $result_category = mysqli_query($con, $sql_category);
     $categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
     return $categories;
@@ -58,13 +113,31 @@ function get_ads_lot(int $lot_id, $con): array
 /**
  * @return array ассоциативный массив из базы данных для регистрации пользователя
  */
-function get_users($con) {
+function get_users($con): array
+{
     $sql_users = "SELECT id, date_registration, email, name, password, contacts FROM user";
     $result_users = mysqli_query($con, $sql_users);
     $users = mysqli_fetch_all($result_users, MYSQLI_ASSOC);
     return $users;
 }
 
+/**
+ * @param string $email email пользователя, проходящего авторизацию
+ * @param mixed $con подключение к базе данных
+ * @return string[]|null имя пользователя по email из БД
+ */
+function get_user_information($email, $con) {
+    $sql = "SELECT id, name, password FROM user
+            WHERE email = ?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $user_name = mysqli_fetch_assoc($res);
+    return $user_name;
+}
+
+
 $lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-$users_bd = "INSERT INTO user (date_registration, email, name, password, contacts) VALUES (?, ?, ?, ?, ?)";
+$users_db = "INSERT INTO user (date_registration, email, name, password, contacts) VALUES (?, ?, ?, ?, ?)";

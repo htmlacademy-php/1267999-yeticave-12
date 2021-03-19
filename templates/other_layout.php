@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>DC Ply Mens 2016/2017 Snowboard</title>
+  <title><?= $title; ?></title>
   <link href="css/normalize.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
 </head>
@@ -22,9 +22,9 @@
       </form>
       <a class="main-header__add-lot button" href="add_lot.php">Добавить лот</a>
       <nav class="user-menu">
-        <?php if ($_SESSION['name']): ?>
+        <?php if ($user['name']): ?>
         <div class="user-menu__logged">
-          <p><?= $_SESSION['name'] ?></p>
+          <p><?= $user['name']; ?></p>
           <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
           <a class="user-menu__logout" href="logout.php">Выход</a>
         </div>
@@ -45,119 +45,14 @@
   <main>
     <nav class="nav">
       <ul class="nav__list container">
-        <li class="nav__item">
-          <a href="all-lots.html">Доски и лыжи</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Крепления</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Ботинки</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Одежда</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Инструменты</a>
-        </li>
-        <li class="nav__item">
-          <a href="all-lots.html">Разное</a>
-        </li>
+        <?php foreach ($categories as $category): ?>
+          <li class="nav__item">
+            <a href="all-lots.html"><?= $category['title']; ?></a>
+          </li>
+        <?php endforeach; ?>
       </ul>
     </nav>
-    <section class="lot-item container">
-        <h2><?= $ads_lot['category']; ?></h2>
-      <div class="lot-item__content">
-        <div class="lot-item__left">
-          <div class="lot-item__image">
-            <img src="<?= $ads_lot['url']; ?>" width="730" height="548" alt="<?= $ads_lot['category']; ?>>">
-          </div>
-          <p class="lot-item__category">Категория: <span><?= $ads_lot['category']; ?></span></p>
-            <p class="lot-item__description"></p><?= $ads_lot['description']; ?></p>
-        </div>
-        <div class="lot-item__right">
-          <?php if ($_SESSION['name']): ?>
-          <div class="lot-item__state">
-            <div class="lot-item__timer timer<?php if ($ads_lot['lot_timer']): ?> timer--finishing<?php endif ?>">
-                <?= ($ads_lot['calculation_date']); ?>
-            </div>
-            <div class="lot-item__cost-state">
-              <div class="lot-item__rate">
-                <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost">10 999</span>
-              </div>
-              <div class="lot-item__min-cost">
-                Мин. ставка <span>12 000 р</span>
-              </div>
-            </div>
-            <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
-              <p class="lot-item__form-item form__item form__item--invalid">
-                <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="12 000">
-                <span class="form__error">Введите наименование лота</span>
-              </p>
-              <button type="submit" class="button">Сделать ставку</button>
-            </form>
-          </div>
-          <?php endif; ?>
-          <div class="history">
-            <h3>История ставок (<span>10</span>)</h3>
-            <table class="history__list">
-              <tr class="history__item">
-                <td class="history__name">Иван</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">5 минут назад</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Константин</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">20 минут назад</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Евгений</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">Час назад</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Игорь</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 08:21</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Енакентий</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 13:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Семён</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 12:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Илья</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 10:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Енакентий</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 13:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Семён</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 12:20</td>
-              </tr>
-              <tr class="history__item">
-                <td class="history__name">Илья</td>
-                <td class="history__price">10 999 р</td>
-                <td class="history__time">19.03.17 в 10:20</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
+    <?= $content; ?>
   </main>
 
 </div>
@@ -165,24 +60,11 @@
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
+      <?php foreach ($categories as $category): ?>
       <li class="nav__item">
-        <a href="all-lots.html">Доски и лыжи</a>
+        <a href="all-lots.html"><?= $category['title']; ?></a>
       </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Крепления</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Ботинки</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Одежда</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Инструменты</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Разное</a>
-      </li>
+      <?php endforeach; ?>
     </ul>
   </nav>
   <div class="main-footer__bottom container">
@@ -212,7 +94,7 @@
         <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg"><circle stroke="#879296" fill="none" cx="13.5" cy="13.5" r="12.666"/><path fill="#879296" d="M13.92 18.07c.142-.016.278-.074.39-.166.077-.107.118-.237.116-.37 0 0 0-1.13.516-1.296.517-.165 1.208 1.09 1.95 1.58.276.213.624.314.973.28h1.95s.973-.057.525-.837c-.38-.62-.865-1.17-1.432-1.626-1.208-1.1-1.043-.916.41-2.816.886-1.16 1.236-1.86 1.13-2.163-.108-.302-.76-.214-.76-.214h-2.164c-.092-.026-.19-.026-.282 0-.083.058-.15.135-.195.225-.224.57-.49 1.125-.8 1.656-.973 1.61-1.344 1.697-1.51 1.59-.37-.234-.272-.975-.272-1.433 0-1.56.243-2.202-.468-2.377-.32-.075-.647-.108-.974-.098-.604-.052-1.213.01-1.793.186-.243.116-.438.38-.32.4.245.018.474.13.642.31.152.303.225.638.214.975 0 0 .127 1.832-.302 2.056-.43.223-.692-.167-1.55-1.618-.29-.506-.547-1.03-.77-1.57-.038-.09-.098-.17-.174-.233-.1-.065-.214-.108-.332-.128H6.485s-.312 0-.42.137c-.106.135 0 .36 0 .36.87 2 2.022 3.868 3.42 5.543.923.996 2.21 1.573 3.567 1.598z"/></svg>
       </a>
     </div>
-    <a class="main-footer__add-lot button" href="add-lot.html">Добавить лот</a>
+    <a class="main-footer__add-lot button" href="add_lot.php">Добавить лот</a>
     <div class="main-footer__developed-by">
       <span class="visually-hidden">Разработано:</span>
       <a class="logo-academy" href="https://htmlacademy.ru/intensive/php">
