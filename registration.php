@@ -22,16 +22,16 @@ if ($_SESSION['name']) {
         $registration_message_length = validate_correct_length($message, MIN_VALUE, MAX_VALUE);
         $errors = [];
         $rules = [
-            'email' => function($email) {
+            'email' => function ($email) {
                 return email_validate($email);
             },
-            'password' => function($password) {
+            'password' => function ($password) {
                 return validate_correct_length($password, MIN_VALUE, MAX_VALUE);
             },
-            'name' => function($name) {
+            'name' => function ($name) {
                 return validate_correct_length($name, MIN_VALUE, MAX_VALUE);
             },
-            'message' => function($message) {
+            'message' => function ($message) {
                 return validate_correct_length($message, MIN_VALUE, MAX_VALUE);
             }
         ];
@@ -45,7 +45,7 @@ if ($_SESSION['name']) {
         $errors = array_filter($errors);
         $hash = password_hash($password, PASSWORD_DEFAULT);
         if (empty($errors)) {
-            $stmt = db_get_prepare_stmt($con, $users_db, $data= [$date_registration, $email, $name, $hash, $message]);
+            $stmt = db_get_prepare_stmt($con, $users_db, $data = [$date_registration, $email, $name, $hash, $message]);
             mysqli_stmt_execute($stmt);
             header("Location: login.php");
         }

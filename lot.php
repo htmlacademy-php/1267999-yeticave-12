@@ -2,8 +2,7 @@
 require_once('init.php');
 if (!$con) {
     $content = include_template('404.php');
-}
-else {
+} else {
     $lot_id = filter_input(INPUT_GET, 'id');
     if (!$lot_id) {
         $content = include_template('404.php');

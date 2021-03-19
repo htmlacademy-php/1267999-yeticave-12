@@ -13,7 +13,8 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -43,9 +44,9 @@ function is_date_valid(string $date) : bool {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -73,7 +74,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -104,8 +106,7 @@ function get_date(string $date_ad): array
     $time_in_minutes = str_pad($minutes, 2, "0", STR_PAD_LEFT);
     if ($time_in_hours < 1) {
         $timer_finishing = 1;
-    }
-    else {
+    } else {
         $timer_finishing = 0;
     }
     $period = [
@@ -142,7 +143,8 @@ function get_post_val($value)
  * @param string $lot_category категория лота из суперглобального массива POST
  * @return false|int|string id категории лота
  */
-function category_id_post($categories, $lot_category) {
+function category_id_post($categories, $lot_category)
+{
     $categories_title = array_column($categories, 'title');
     $categories_id = array_column($categories, 'id');
     $categories_sample = array_combine($categories_id, $categories_title);
@@ -155,7 +157,8 @@ function category_id_post($categories, $lot_category) {
  * @param string $lot_category категория лота из суперглобального массива POST
  * @return string валидация категории лота суперглобального массива POST если введено значение возвращает пустую строку, если нет ошибку валидации
  */
-function validate_category($categories, $lot_category) {
+function validate_category($categories, $lot_category)
+{
     $id_categories = in_array($lot_category, array_column($categories, 'title'));
     if (empty($id_categories)) {
         return "Введите название категории";
@@ -175,8 +178,7 @@ function validate_file($lot_file)
         $file_size = $lot_file['size'];
         if (empty($file_name)) {
             return "Загрузите изображение в формате jpg, jpeg, png";
-        }
-        else {
+        } else {
             $file_type = finfo_file($finfo, $file_name);
             if (($file_type !== 'image/jpeg') and ($file_type !== 'image/png')) {
                 return "Загрузите изображение в формате jpg, jpeg, png";
@@ -195,7 +197,8 @@ function validate_file($lot_file)
  * @param int $max максимальное значение количества символов в строке для валидации
  * @return string валидация длины строки по параметрам
  */
-function validate_correct_length($value, $min, $max) {
+function validate_correct_length($value, $min, $max)
+{
     $len = strlen($value);
     if ($len < $min or $len > $max) {
         return "Значение должно быть от $min до $max символов";
@@ -207,7 +210,8 @@ function validate_correct_length($value, $min, $max) {
  * @param string $value значение суперглобального массива POST по ключу
  * @return string валидация строки по параметрам (целое число больше 0)
  */
-function validate_price($value) {
+function validate_price($value)
+{
     if (!ctype_digit($value)) {
         return "Содержимое поля должно быть целым числом больше ноля";
     }
@@ -219,7 +223,8 @@ function validate_price($value) {
  * @param bool $date_valid_separator проверка даты на регламент
  * @return string валидация даты (больше текущей даты)
  */
-function validate_date($lot_date, $date_valid_separator) {
+function validate_date($lot_date, $date_valid_separator)
+{
     if ($date_valid_separator) {
         $date_today = date("Y-m-d");
         $interval = strtotime($lot_date) - strtotime($date_today);
@@ -228,8 +233,7 @@ function validate_date($lot_date, $date_valid_separator) {
         } else {
             $date_valid = "Указанная дата должна быть больше текущей даты, хотя бы на один день";
         }
-    }
-    else {
+    } else {
         $date_valid = "Указанная дата должна быть больше текущей даты, хотя бы на один день";
     }
     return $date_valid;
@@ -263,7 +267,7 @@ function save_file($errors, $lot_file)
         $file_url = 'uploads/' . $file_name;
         move_uploaded_file($lot_file['tmp_name'], $file_path . $file_name);
         return $file_url;
-        }
+    }
     return "";
 }
 
@@ -280,7 +284,8 @@ function get_post_category($lot_category)
  * @param string $email значение суперглобального массива POST по ключу email
  * @return string если валидация прошла успешно - пустую строку. если нет - ошибку валидации
  */
-function email_validate($email) {
+function email_validate($email)
+{
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Введите e-mail";
     }
@@ -292,7 +297,8 @@ function email_validate($email) {
  * @param string $email значение суперглобального массива POST по ключу email
  * @return string если в БД нет повторяющего значения - пустая строка, если есть - ошибка валидации
  */
-function validate_repeat_email($users, $email) {
+function validate_repeat_email($users, $email)
+{
     $email_repeat = in_array("$email", array_column($users, 'email'));
     if ($email_repeat) {
         return "Указанный email - '$email' уже используется другим пользователем";
@@ -306,7 +312,8 @@ function validate_repeat_email($users, $email) {
  * @param string $password пароль пользователя, полученный при авторизации из суперглобального массива POST
  * @return string проверка введенного пароля пользователя по введенному email
  */
-function password_verification($user_information, $email, $password) {
+function password_verification($user_information, $email, $password)
+{
     if ($email && $password) {
         if ($user_information) {
             $user_password_hash = $user_information['password'];

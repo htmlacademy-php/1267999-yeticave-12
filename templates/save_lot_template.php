@@ -1,14 +1,17 @@
-<form class="form form--add-lot container<?= empty($errors) ? "" : " form--invalid"; ?>" action="add_lot.php" enctype="multipart/form-data" method="post"> <!-- form--invalid -->
+<form class="form form--add-lot container<?= empty($errors) ? "" : " form--invalid"; ?>" action="add_lot.php"
+      enctype="multipart/form-data" method="post"> <!-- form--invalid -->
     <h2>Добавление лота</h2>
     <div class="form__container-two">
-        <div class="form__item<?= empty($errors['lot-name']) ? "" : " form__item--invalid"; ?>"> <!-- form__item--invalid -->
+        <div class="form__item<?= empty($errors['lot-name']) ? "" : " form__item--invalid"; ?>">
+            <!-- form__item--invalid -->
             <label for="lot-name">Наименование <sup>*</sup></label>
-            <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?= get_post_val($lot['name']); ?>">
+            <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота"
+                   value="<?= get_post_val($lot['name']); ?>">
             <span class="form__error"><?= $errors['lot-name'] ?? ""; ?></span>
         </div>
         <div class="form__item<?= empty($errors['category']) ? "" : " form__item--invalid"; ?>">
             <label for="category">Категория <sup>*</sup></label>
-            <select id="category" name="category" >
+            <select id="category" name="category">
                 <option><?= get_post_category($lot['category']); ?></option>
                 <?php foreach ($categories as $category): ?>
                     <option id="<?= $category['id']; ?>"><?= $category['title']; ?></option>
@@ -25,7 +28,7 @@
     <div class="form__item form__item--file<?= empty($errors['file']) ? "" : " form__item--invalid"; ?>">
         <label>Изображение <sup>*</sup></label>
         <div class="form__input-file">
-            <input class="visually-hidden" type="file" id="lot-img" name = "file" value="">
+            <input class="visually-hidden" type="file" id="lot-img" name="file" value="">
             <label for="lot-img">
                 Добавить
             </label>
@@ -45,7 +48,8 @@
         </div>
         <div class="form__item<?= empty($errors['lot-date']) ? "" : " form__item--invalid"; ?>">
             <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
-            <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= get_post_val($lot['date']); ?>">
+            <input class="form__input-date" id="lot-date" type="text" name="lot-date"
+                   placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= get_post_val($lot['date']); ?>">
             <span class="form__error"><?= $errors['lot-date']; ?></span>
         </div>
     </div>

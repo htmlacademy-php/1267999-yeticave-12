@@ -11,7 +11,8 @@
         <div class="lot-item__right">
             <?php if ($_SESSION['name']): ?>
                 <div class="lot-item__state">
-                    <div class="lot-item__timer timer<?php if ($ads_lot['lot_timer']): ?> timer--finishing<?php endif ?>">
+                    <div
+                        class="lot-item__timer timer<?php if ($ads_lot['lot_timer']): ?> timer--finishing<?php endif ?>">
                         <?= ($ads_lot['calculation_date']); ?>
                     </div>
                     <div class="lot-item__cost-state">

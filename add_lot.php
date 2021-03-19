@@ -26,16 +26,16 @@ if (!$_SESSION['name']) {
         $date_valid_separator = is_date_valid($lot_date);
         $errors = [];
         $rules = [
-            'lot-name' => function($lot_name) {
+            'lot-name' => function ($lot_name) {
                 return validate_correct_length($lot_name, 5, 128);
             },
-            'message' => function($lot_message) {
+            'message' => function ($lot_message) {
                 return validate_correct_length($lot_message, 20, 512);
             },
-            'lot-rate' => function($lot_rate) {
+            'lot-rate' => function ($lot_rate) {
                 return validate_price($lot_rate);
             },
-            'lot-step' => function($lot_step) {
+            'lot-step' => function ($lot_step) {
                 return validate_price($lot_step);
             }
         ];
@@ -47,7 +47,7 @@ if (!$_SESSION['name']) {
         $error_category = validate_category($categories, $lot_category);
         $error_file = validate_file($lot_file);
         $error_date = validate_date($lot_date, $date_valid_separator);
-        $errors = get_errors ($error_file, $error_category, $error_date, $errors);
+        $errors = get_errors($error_file, $error_category, $error_date, $errors);
         $errors = array_filter($errors);
         $lot_url = save_file($errors, $lot_file);
         $id_user_lot = $_SESSION['id'];

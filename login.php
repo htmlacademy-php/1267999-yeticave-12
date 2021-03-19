@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $login['password'];
     $errors = [];
     $rules = [
-        'email' => function($email) {
+        'email' => function ($email) {
             return email_validate($email);
         },
-        'password' => function($password) {
+        'password' => function ($password) {
             return validate_correct_length($password, MIN_VALUE, MAX_VALUE);
         }
     ];
