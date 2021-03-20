@@ -59,4 +59,7 @@ SELECT lot.id as lot_id, name, rate.id as rate_id, date_rate, price_rate  FROM l
      WHERE lot.id = 2
      ORDER BY date_creation ASC;
 
-SELECT lot.id FROM lot
+SELECT lot.id FROM lot;
+
+
+

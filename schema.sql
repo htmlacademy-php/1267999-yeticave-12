@@ -70,6 +70,6 @@ CREATE TABLE `yeticave`.`rate`
             ON DELETE CASCADE
             ON UPDATE NO ACTION
 );
-
-
+USE yeticave;
+CREATE FULLTEXT INDEX lot_search ON lot (name, description);
 

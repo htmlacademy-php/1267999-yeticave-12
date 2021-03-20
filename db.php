@@ -137,6 +137,19 @@ function get_user_information($email, $con)
     return $user_name;
 }
 
+function search_lot($search, $con)
+{
+    $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
+    INNER JOIN category ON lot.id_category = category.id
+    WHERE MATCH(name, description) AGAINST(?)
+    ORDER BY date_creation ASC";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $search);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $found_lots;
+}
 
 $lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
