@@ -29,7 +29,7 @@
             <h2>Ничего не найдено по вашему запросу</h2>
         <?php endif; ?>
     </section>
-    <?php if ($count_found_lots > LIMIT_SAMPLE_LOT): ?>
+    <?php if ($array_page): ?>
     <ul class="pagination-list">
         <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
         <?php foreach ($array_page as $page): ?>
