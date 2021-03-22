@@ -13,66 +13,14 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
-/**
- * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
- *
- * @param $link mysqli Ресурс соединения
- * @param $sql string SQL запрос с плейсхолдерами вместо значений
- * @param array $data Данные для вставки на место плейсхолдеров
- *
- * @return mysqli_stmt Подготовленное выражение
- */
-function db_get_prepare_stmt($link, $sql, $data = []) {
-    $stmt = mysqli_prepare($link, $sql);
-
-    if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
-        die($errorMsg);
-    }
-
-    if ($data) {
-        $types = '';
-        $stmt_data = [];
-
-        foreach ($data as $value) {
-            $type = 's';
-
-            if (is_int($value)) {
-                $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
-            }
-
-            if ($type) {
-                $types .= $type;
-                $stmt_data[] = $value;
-            }
-        }
-
-        $values = array_merge([$stmt, $types], $stmt_data);
-
-        $func = 'mysqli_stmt_bind_param';
-        $func(...$values);
-
-        if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
-            die($errorMsg);
-        }
-    }
-
-    return $stmt;
-}
 
 /**
  * Возвращает корректную форму множественного числа
@@ -96,9 +44,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -126,7 +74,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -157,8 +106,7 @@ function get_date(string $date_ad): array
     $time_in_minutes = str_pad($minutes, 2, "0", STR_PAD_LEFT);
     if ($time_in_hours < 1) {
         $timer_finishing = 1;
-    }
-    else {
+    } else {
         $timer_finishing = 0;
     }
     $period = [
@@ -195,7 +143,8 @@ function get_post_val($value)
  * @param string $lot_category категория лота из суперглобального массива POST
  * @return false|int|string id категории лота
  */
-function category_id_post($categories, $lot_category) {
+function category_id_post($categories, $lot_category)
+{
     $categories_title = array_column($categories, 'title');
     $categories_id = array_column($categories, 'id');
     $categories_sample = array_combine($categories_id, $categories_title);
@@ -208,13 +157,13 @@ function category_id_post($categories, $lot_category) {
  * @param string $lot_category категория лота из суперглобального массива POST
  * @return string валидация категории лота суперглобального массива POST если введено значение возвращает пустую строку, если нет ошибку валидации
  */
-function validate_category($categories, $lot_category) {
+function validate_category($categories, $lot_category)
+{
     $id_categories = in_array($lot_category, array_column($categories, 'title'));
     if (empty($id_categories)) {
         return "Введите название категории";
-    } else {
-        return "";
     }
+    return "";
 }
 
 /**
@@ -229,8 +178,7 @@ function validate_file($lot_file)
         $file_size = $lot_file['size'];
         if (empty($file_name)) {
             return "Загрузите изображение в формате jpg, jpeg, png";
-        }
-        else {
+        } else {
             $file_type = finfo_file($finfo, $file_name);
             if (($file_type !== 'image/jpeg') and ($file_type !== 'image/png')) {
                 return "Загрузите изображение в формате jpg, jpeg, png";
@@ -240,6 +188,7 @@ function validate_file($lot_file)
             }
         }
     }
+    return "";
 }
 
 /**
@@ -248,21 +197,25 @@ function validate_file($lot_file)
  * @param int $max максимальное значение количества символов в строке для валидации
  * @return string валидация длины строки по параметрам
  */
-function validate_correct_length($value, $min, $max) {
+function validate_correct_length($value, $min, $max)
+{
     $len = strlen($value);
     if ($len < $min or $len > $max) {
         return "Значение должно быть от $min до $max символов";
     }
+    return "";
 }
 
 /**
  * @param string $value значение суперглобального массива POST по ключу
  * @return string валидация строки по параметрам (целое число больше 0)
  */
-function validate_price($value) {
+function validate_price($value)
+{
     if (!ctype_digit($value)) {
         return "Содержимое поля должно быть целым числом больше ноля";
     }
+    return "";
 }
 
 /**
@@ -270,7 +223,8 @@ function validate_price($value) {
  * @param bool $date_valid_separator проверка даты на регламент
  * @return string валидация даты (больше текущей даты)
  */
-function validate_date($lot_date, $date_valid_separator) {
+function validate_date($lot_date, $date_valid_separator)
+{
     if ($date_valid_separator) {
         $date_today = date("Y-m-d");
         $interval = strtotime($lot_date) - strtotime($date_today);
@@ -279,8 +233,7 @@ function validate_date($lot_date, $date_valid_separator) {
         } else {
             $date_valid = "Указанная дата должна быть больше текущей даты, хотя бы на один день";
         }
-    }
-    else {
+    } else {
         $date_valid = "Указанная дата должна быть больше текущей даты, хотя бы на один день";
     }
     return $date_valid;
@@ -314,7 +267,8 @@ function save_file($errors, $lot_file)
         $file_url = 'uploads/' . $file_name;
         move_uploaded_file($lot_file['tmp_name'], $file_path . $file_name);
         return $file_url;
-        }
+    }
+    return "";
 }
 
 /**
@@ -330,10 +284,12 @@ function get_post_category($lot_category)
  * @param string $email значение суперглобального массива POST по ключу email
  * @return string если валидация прошла успешно - пустую строку. если нет - ошибку валидации
  */
-function email_validate($email) {
+function email_validate($email)
+{
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Введите e-mail";
     }
+    return "";
 }
 
 /**
@@ -341,56 +297,34 @@ function email_validate($email) {
  * @param string $email значение суперглобального массива POST по ключу email
  * @return string если в БД нет повторяющего значения - пустая строка, если есть - ошибка валидации
  */
-function validate_email($users, $email) {
+function validate_repeat_email($users, $email)
+{
     $email_repeat = in_array("$email", array_column($users, 'email'));
     if ($email_repeat) {
         return "Указанный email - '$email' уже используется другим пользователем";
     }
+    return "";
 }
 
 /**
- * @param mixed $users ассоциативный массив из БД users
- * @param string $user_name имя залогиненного пользователя, прошедшего авторизацию
- * @return int id пользователя, добавившего объявление
+ * @param array $user_information информация о пользователе, проходящего авторизацию
+ * @param string $email email пользователя, полученный при авторизации из суперглобального массива POST
+ * @param string $password пароль пользователя, полученный при авторизации из суперглобального массива POST
+ * @return string проверка введенного пароля пользователя по введенному email
  */
-function get_id_user_lot($users, $user_name) {
-    if ($user_name) {
-        $array_user_name = array_column($users, 'name');
-        $array_id_user = array_column($users, 'id');
-        $array_users = array_combine($array_user_name, $array_id_user);
-        $id_user_lot = $array_users[$user_name];
-        return $id_user_lot;
-    }
-}
-
-/**
- * @param mixed $users ассоциативный массив из БД users
- * @param mixed $password пароль пользователя при  авторизации
- * @param string $email email пользователя при  авторизации
- * @return string если пользователь найден пустая строка, в противном ошибку
- */
-function password_verification($users, $password, $email) {
-    if ($password && $email) {
-        $array_email = array_column($users, 'email');
-        $array_password = array_column($users, 'password');
-        $array_users = array_combine($array_email, $array_password);
-        $hash_password_user = $array_users[$email];
-        $password_validate = password_verify($password, $hash_password_user);
-        if (!$password_validate) {
-            return "По email '$email' не найден пользователь с паролем '$password' , проверьте правильность ввода email или пароля";
+function password_verification($user_information, $email, $password)
+{
+    if ($email && $password) {
+        if ($user_information) {
+            $user_password_hash = $user_information['password'];
+            $password_validate = password_verify($password, $user_password_hash);
+            if ($password_validate) {
+                return "";
+            } else {
+                return "Вы ввели неверный пароль";
+            }
+        } else {
+            return "Вы ввели неверный пароль";
         }
     }
-}
-
-/**
- * @param mixed $users ассоциативный массив из БД users
- * @param string $email email пользователя при  авторизации
- * @return string имя пользователя, прошедшего авторизацию
- */
-function get_user_name($users, $email) {
-    $array_email = array_column($users, 'email');
-    $array_name = array_column($users, 'name');
-    $array_users = array_combine($array_email, $array_name);
-    $user_name = $array_users[$email];
-    return $user_name;
 }

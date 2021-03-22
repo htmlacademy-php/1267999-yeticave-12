@@ -1,11 +1,11 @@
 USE yeticave;
 
-INSERT INTO category (title, cod) VALUES ('Доски и лыжи', 'boards');
-INSERT INTO category (title, cod) VALUES ('Крепления', 'attachment');
-INSERT INTO category (title, cod) VALUES ('Ботинки', 'boots');
-INSERT INTO category (title, cod) VALUES ('Одежда', 'clothing');
-INSERT INTO category (title, cod) VALUES ('Инструменты', 'tools');
-INSERT INTO category (title, cod) VALUES ('Разное', 'other');
+INSERT INTO category (title, code) VALUES ('Доски и лыжи', 'boards');
+INSERT INTO category (title, code) VALUES ('Крепления', 'attachment');
+INSERT INTO category (title, code) VALUES ('Ботинки', 'boots');
+INSERT INTO category (title, code) VALUES ('Одежда', 'clothing');
+INSERT INTO category (title, code) VALUES ('Инструменты', 'tools');
+INSERT INTO category (title, code) VALUES ('Разное', 'other');
 
 
 INSERT INTO user (date_registration, email, name, password, contacts) VALUES ('2021-01-09 21:35:22', 'js@mail.ru', 'Anton', '111222', 'номер телефона 89275551144');
@@ -59,4 +59,7 @@ SELECT lot.id as lot_id, name, rate.id as rate_id, date_rate, price_rate  FROM l
      WHERE lot.id = 2
      ORDER BY date_creation ASC;
 
-SELECT lot.id FROM lot
+SELECT lot.id FROM lot;
+
+
+

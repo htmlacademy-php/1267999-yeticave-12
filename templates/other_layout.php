@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>DC Ply Mens 2016/2017 Snowboard</title>
+    <title><?= $title; ?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -13,23 +13,31 @@
     <header class="main-header">
         <div class="main-header__container container">
             <h1 class="visually-hidden">YetiCave</h1>
-            <a class="main-header__logo" href="index.html">
+            <a class="main-header__logo" href="index.php">
                 <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
-            <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
+            <form class="main-header__search" method="get" action="search.php" autocomplete="off">
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
-            <a class="main-header__add-lot button" href="add-lot.html">Добавить лот</a>
+            <a class="main-header__add-lot button" href="add_lot.php">Добавить лот</a>
             <nav class="user-menu">
-                <ul class="user-menu__list">
-                    <li class="user-menu__item">
-                        <a href="sign-up.html">Регистрация</a>
-                    </li>
-                    <li class="user-menu__item">
-                        <a href="login.html">Вход</a>
-                    </li>
-                </ul>
+                <?php if ($user['name']): ?>
+                    <div class="user-menu__logged">
+                        <p><?= $user['name']; ?></p>
+                        <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
+                        <a class="user-menu__logout" href="logout.php">Выход</a>
+                    </div>
+                <?php else: ?>
+                    <ul class="user-menu__list">
+                        <li class="user-menu__item">
+                            <a href="registration.php">Регистрация</a>
+                        </li>
+                        <li class="user-menu__item">
+                            <a href="login.php">Вход</a>
+                        </li>
+                    </ul>
+                <?php endif; ?>
             </nav>
         </div>
     </header>
@@ -37,30 +45,14 @@
     <main>
         <nav class="nav">
             <ul class="nav__list container">
-                <li class="nav__item">
-                    <a href="all-lots.html">Доски и лыжи</a>
-                </li>
-                <li class="nav__item">
-                    <a href="all-lots.html">Крепления</a>
-                </li>
-                <li class="nav__item">
-                    <a href="all-lots.html">Ботинки</a>
-                </li>
-                <li class="nav__item">
-                    <a href="all-lots.html">Одежда</a>
-                </li>
-                <li class="nav__item">
-                    <a href="all-lots.html">Инструменты</a>
-                </li>
-                <li class="nav__item">
-                    <a href="all-lots.html">Разное</a>
-                </li>
+                <?php foreach ($categories as $category): ?>
+                    <li class="nav__item">
+                        <a href="all-lots.html"><?= $category['title']; ?></a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </nav>
-        <section class="lot-item container">
-            <h2>404 Страница не найдена</h2>
-            <p>Данной страницы не существует на сайте.</p>
-        </section>
+        <?= $content; ?>
     </main>
 
 </div>
@@ -68,24 +60,11 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <li class="nav__item">
-                <a href="all-lots.html">Доски и лыжи</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Крепления</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Ботинки</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Одежда</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Инструменты</a>
-            </li>
-            <li class="nav__item">
-                <a href="all-lots.html">Разное</a>
-            </li>
+            <?php foreach ($categories as $category): ?>
+                <li class="nav__item">
+                    <a href="all-lots.html"><?= $category['title']; ?></a>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
@@ -131,7 +110,7 @@
                 </svg>
             </a>
         </div>
-        <a class="main-footer__add-lot button" href="add-lot.html">Добавить лот</a>
+        <a class="main-footer__add-lot button" href="add_lot.php">Добавить лот</a>
         <div class="main-footer__developed-by">
             <span class="visually-hidden">Разработано:</span>
             <a class="logo-academy" href="https://htmlacademy.ru/intensive/php">
