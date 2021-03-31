@@ -7,8 +7,7 @@
                value="<?= get_post_val($login['email']); ?>">
         <span class="form__error"><?= $errors['email'] ?? ""; ?></span>
     </div>
-    <div
-        class="form__item form__item--last<?= empty($errors['password'] || $errors['password_verification']) ? "" : " form__item--invalid"; ?>">
+    <div class="form__item form__item--last<?= empty($errors['password'] || $errors['password_verification']) ? "" : " form__item--invalid"; ?>">
         <label for="password">Пароль <sup>*</sup></label>
         <input id="password" type="password" name="password" placeholder="Введите пароль">
         <span class="form__error"><?= $errors['password'] ?? ""; ?></span>

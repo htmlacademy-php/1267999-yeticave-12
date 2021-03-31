@@ -13,7 +13,6 @@ if (!$_SESSION['name']) {
             'step' => $_POST['lot-step'],
             'date' => $_POST['lot-date']
         ];
-
         $lot_name = $lot['name'];
         $lot_category = $lot['category'];
         $lot_message = $lot['message'];
@@ -60,7 +59,7 @@ if (!$_SESSION['name']) {
         $main_content = include_template('save_lot_template.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
         $add_lot_content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $_SESSION]);
     } else {
-        $main_content = include_template('save_lot_template.php');
+        $main_content = include_template('save_lot_template.php', ['categories' => $categories]);
         $add_lot_content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $_SESSION]);
     }
     print($add_lot_content);
