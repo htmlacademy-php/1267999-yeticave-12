@@ -72,7 +72,9 @@ function get_ads($con): array
 {
     $sql_ads = "SELECT lot.id as id, name, title as category, price_rate as price, image as url, date_completion as calculation_date FROM category
     INNER JOIN lot ON category.id = lot.id_category
-    INNER JOIN rate ON lot.id = rate.id_lot
+    INNER JOIN (SELECT id_lot, MAX(price_rate) as price_rate FROM rate
+GROUP BY id_lot
+        ) r on lot.id = r.id_lot
     WHERE lot.date_creation < lot.date_completion
     ORDER BY date_creation";
     $result_ads = mysqli_query($con, $sql_ads);
@@ -96,10 +98,13 @@ function get_lots($con): array
  * @return array  ассоциативный массив из базы данных для отображения карточки лота
  */
 
-function get_ads_lot(int $lot_id, $con): array
+function get_ads_lot(int $lot_id, $con)
 {
-    $sql = "SELECT lot.id as id, title as category, name, image as url, description, date_completion as calculation_date FROM lot
+    $sql = "SELECT lot.id as lot_id, title as category, name, image as url, description, date_completion as calculation_date, price_starting, step_rate, price_rate FROM lot
         INNER JOIN category ON lot.id_category = category.id
+        LEFT JOIN (SELECT id_lot, MAX(price_rate) as price_rate FROM rate
+GROUP BY id_lot
+        ) r on lot.id = r.id_lot
         WHERE lot.id = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $lot_id);
@@ -137,7 +142,12 @@ function get_user_information($email, $con)
     return $user_name;
 }
 
-function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page)
+/**
+ * @param string $search поиск по названию или описанию лота
+ * @param mixed $con подключение к базе данных
+ * @return array найденные лоты из БД
+ */
+function search_lot($search, $con)
 {
     $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
     INNER JOIN category ON lot.id_category = category.id
@@ -174,6 +184,61 @@ function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page)
     return $found;
 }
 
+/**
+ * @param mixed $con подключение к базе данных
+ * @param int $lot_id id лота из БД
+ * @return array ставки пользователей из БД по id лота
+ */
+function get_users_lots($con, int $lot_id): array
+{
+    $sql_users_lots = "SELECT name, price_rate, DATE_FORMAT(date_rate, '%d.%m.%y %H:%i') as date_rate FROM rate
+    INNER JOIN user on rate.id_user_game = user.id
+    WHERE id_lot = $lot_id
+    ORDER BY date_rate DESC";
+    $result_lots = mysqli_query($con, $sql_users_lots);
+    $lots = mysqli_fetch_all($result_lots, MYSQLI_ASSOC);
+    return $lots;
+}
+
+/**
+ * @param mixed $con подключение к базе данных
+ * @param int $user_id id пользователя
+ * @return array ставки пользователя из БД
+ */
+function get_my_bets($con, int $user_id)
+{
+    $sql_my_bets = "SELECT lot.id as lot_id, image, title, lot.name as name, contacts, date_completion, id_user_game, price_rate, DATE_FORMAT(date_rate, '%d.%m.%y в %H:%i') as date_rate
+    FROM lot
+    INNER JOIN category on lot.id_category = category.id
+    INNER JOIN (SELECT id_user_game, id_lot, MAX(price_rate) as price_rate, MAX(date_rate) as date_rate, contacts
+    FROM rate
+    RIGHT JOIN user on rate.id_user_game = user.id
+    WHERE rate.id_user_game = $user_id
+    GROUP BY id_lot
+    ) r on lot.id = r.id_lot
+    ORDER BY date_rate DESC";
+    $result_my_bets = mysqli_query($con, $sql_my_bets);
+    $my_bets = mysqli_fetch_all($result_my_bets, MYSQLI_ASSOC);
+    return $my_bets;
+}
+
+/**
+ * @param mixed $con подключение к базе данных
+ * @param int $id_lot id лота из БД
+ * @return array максимальная ставка лота из БД
+ */
+function get_max_bet($con, int $id_lot)
+{
+    $sql_max_bet = "SELECT MAX(price_rate) as price_rate
+    FROM rate
+    WHERE id_lot = $id_lot";
+    $result_max_bet = mysqli_query($con, $sql_max_bet);
+    $my_max_bet = mysqli_fetch_all($result_max_bet, MYSQLI_ASSOC);
+    return $my_max_bet;
+}
+
 $lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $users_db = "INSERT INTO user (date_registration, email, name, password, contacts) VALUES (?, ?, ?, ?, ?)";
+
+$add_rate = "INSERT INTO rate (id_user_game, id_lot, date_rate, price_rate) VALUES (?, ?, ?, ?)";

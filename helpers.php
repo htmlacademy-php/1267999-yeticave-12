@@ -96,7 +96,7 @@ function include_template($name, array $data = [])
  * @param string $date_ad дата окончания аукциона объявления
  * @return array ассоциативный массив ключ is_finishing с булевым значением для проверки количества времени до снятия лота, ключ times со значением количества целых часов и минут до даты окончания аукциона
  */
-function get_date(string $date_ad): array
+function get_date($date_ad)
 {
     $date_today = date("Y-m-d H:i");
     $interval = strtotime($date_ad) - strtotime($date_today);
@@ -327,4 +327,30 @@ function password_verification($user_information, $email, $password)
             return "Вы ввели неверный пароль";
         }
     }
+}
+
+/**
+ * @param int $cost ставка введенная пользователем аукциона из суперглобального массива POST
+ * @param int $min_rate минимальная ставка лота
+ * @return string валидация ставки лота
+ */
+function bid_correctness($cost, $min_rate)
+{
+    if ($cost >= $min_rate) {
+        return "";
+    }
+    return "Введенная ставка должна быть больше или равна минимальной ставке";
+}
+
+/**
+ * @param string $date_completion дата окончания торгов лота
+ * @return bool проверка даты, если настоящая дата > даты окончания торгов лота true, в противном false
+ */
+function get_auction_over($date_completion)
+{
+    $today = date("Y-m-d H:i");
+    if ($today > $date_completion) {
+        return true;
+    }
+    return false;
 }
