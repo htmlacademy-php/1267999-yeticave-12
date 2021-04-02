@@ -76,7 +76,7 @@ function get_ads($con): array
 GROUP BY id_lot
         ) r on lot.id = r.id_lot
     WHERE lot.date_creation < lot.date_completion
-    ORDER BY date_creation ASC";
+    ORDER BY date_creation";
     $result_ads = mysqli_query($con, $sql_ads);
     $ads = mysqli_fetch_all($result_ads, MYSQLI_ASSOC);
     return $ads;
@@ -152,13 +152,36 @@ function search_lot($search, $con)
     $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
     INNER JOIN category ON lot.id_category = category.id
     WHERE MATCH(name, description) AGAINST(?)
-    ORDER BY date_creation ASC";
+    ORDER BY date_creation";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 's', $search);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
-    return $found_lots;
+    $count_page = floor(count($found_lots) / $LIMIT_SAMPLE_LOT);
+    if ($count_page > 0) {
+        $offset = ($count_page - 1) * $LIMIT_SAMPLE_LOT;
+        $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
+    INNER JOIN category ON lot.id_category = category.id
+    WHERE MATCH(name, description) AGAINST(?)
+    ORDER BY date_creation
+    LIMIT $offset, $LIMIT_SAMPLE_LOT";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, 's', $search);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        $found = [
+            "found_lots" => $found_lots,
+            "count_page" => $count_page
+        ];
+        return $found;
+    }
+    $found = [
+        "found_lots" => $found_lots,
+        "count_page" => $count_page
+    ];
+    return $found;
 }
 
 /**

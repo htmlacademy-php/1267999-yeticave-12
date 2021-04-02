@@ -6,7 +6,10 @@ if (!$con) {
 } else {
     $search = filter_input(INPUT_GET, 'search');
     $page = filter_input(INPUT_GET, 'page');
-    $found_lots = search_lot($search, $con);
+    print_r($page);
+
+    $found = search_lot($search, $con, LIMIT_SAMPLE_LOT, $page = 0);
+    $found_lots = $found['found_lots'];
     foreach ($found_lots as $key => $value) {
         $date_completion = get_date($value['date_completion'])['times'];
         $lot_timer = get_date($value['date_completion'])['is_finishing'];
@@ -14,11 +17,12 @@ if (!$con) {
         $found_lots[$key]['lot_timer'] = $lot_timer;
     }
 
-    $count_found_lots = count($found_lots);
-    $count_page = floor($count_found_lots / LIMIT_SAMPLE_LOT);
+    $count_page = $found['count_page'];
+
     for ($i = 1; $i <= $count_page; $i++) {
         $array_page[] = $i;
     }
+//    print_r($array_page);
     $main_content = include_template('search_template.php', ['found_lots' => $found_lots, 'search' => $search, 'count_found_lots' => $count_found_lots, 'LIMIT_SAMPLE_LOT' => LIMIT_SAMPLE_LOT, 'array_page' => $array_page]);
     $content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $_SESSION]);
 }
