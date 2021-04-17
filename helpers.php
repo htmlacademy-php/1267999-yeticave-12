@@ -1,4 +1,5 @@
 <?php
+require_once('db.php');
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -170,7 +171,7 @@ function validate_category($categories, $lot_category)
  * @param mixed $lot_file значение суперглобального массива FILE лота
  * @return string валидация загруженного файла лота если файл удовлетворяет условиям возвращает пустую строку, если нет ошибку валидации
  */
-function validate_file($lot_file)
+function validate_file($lot_file, $min_size_file)
 {
     if (isset($lot_file)) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -183,7 +184,7 @@ function validate_file($lot_file)
             if (($file_type !== 'image/jpeg') and ($file_type !== 'image/png')) {
                 return "Загрузите изображение в формате jpg, jpeg, png";
             }
-            if ($file_size > 2000000) {
+            if ($file_size > $min_size_file) {
                 return "Максимальный размер файла: 2 МБ";
             }
         }
@@ -327,6 +328,7 @@ function password_verification($user_information, $email, $password)
             return "Вы ввели неверный пароль";
         }
     }
+    return "";
 }
 
 /**
@@ -354,3 +356,57 @@ function get_auction_over($date_completion)
     }
     return false;
 }
+
+/**
+ * добавляет созданный лот в бд
+ * @param mixed $con подключение к базе данных
+ * @param int $lot_category_id id категории лота
+ * @param int $id_user_lot id пользователя в сессии
+ * @param string $date_creation дата создания лота
+ * @param string $lot_name имя созданного лота
+ * @param string $lot_message описание созданного лота
+ * @param string $lot_url адрес изображения лота
+ * @param int $lot_rate цена созданного лота
+ * @param string $lot_date дата созданного лота
+ * @param int $lot_step шаг ставки созданного лота
+ * @return int|string id последнего добавленного в бд лота
+ */
+function add_lot_to_db($con, $lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step)
+{
+    $lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [$lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
+    mysqli_stmt_execute($stmt);
+    $last_lot = mysqli_insert_id($con);
+    return $last_lot;
+}
+
+/**
+ * добавляет в базу данных зарегистрированного пользователя
+ * @param mixed $con подключение к базе данных
+ * @param string $date_registration дата регистрации пользователя
+ * @param string $email email зарегистрированного пользователя
+ * @param string $name имя зарегистрированного пользователя
+ * @param string $hash хэш пароля зарегистрированного пользователя
+ * @param string $message контактные данные
+ */
+function add_user_to_db($con, $date_registration, $email, $name, $hash, $message)
+{
+    $users_db = "INSERT INTO user (date_registration, email, name, password, contacts) VALUES (?, ?, ?, ?, ?)";
+    $stmt = db_get_prepare_stmt($con, $users_db, $data = [$date_registration, $email, $name, $hash, $message]);
+    mysqli_stmt_execute($stmt);
+}
+
+/**
+ * @param mixed $con подключение к базе данных
+ * @param int $user_id id пользователя который сделал ставку
+ * @param int $lot_id id лота для ставки
+ * @param string $today сегодняшняя дата
+ * @param int $cost цена введенная пользователем
+ */
+function add_user_rate_to_db($con, $user_id, $lot_id, $today, $cost)
+{
+    $add_rate = "INSERT INTO rate (id_user_game, id_lot, date_rate, price_rate) VALUES (?, ?, ?, ?)";
+    $stmt = db_get_prepare_stmt($con, $add_rate, $data = [$user_id, $lot_id, $today, $cost]);
+    mysqli_stmt_execute($stmt);
+}
+

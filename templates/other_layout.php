@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?= $title; ?></title>
+    <title><?= htmlspecialchars($title); ?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -24,7 +24,7 @@
             <nav class="user-menu">
                 <?php if ($user['name']): ?>
                     <div class="user-menu__logged">
-                        <p><?= $user['name']; ?></p>
+                        <p><?= htmlspecialchars($user['name']); ?></p>
                         <a class="user-menu__bets" href="my_bets.php">Мои ставки</a>
                         <a class="user-menu__logout" href="logout.php">Выход</a>
                     </div>
@@ -47,7 +47,7 @@
             <ul class="nav__list container">
                 <?php foreach ($categories as $category): ?>
                     <li class="nav__item">
-                        <a href="all-lots.html"><?= $category['title']; ?></a>
+                        <a href="all-lots.html"><?= htmlspecialchars($category['title']); ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -62,7 +62,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="all-lots.html"><?= $category['title']; ?></a>
+                    <a href="all-lots.html"><?= htmlspecialchars($category['title']); ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

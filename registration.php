@@ -1,12 +1,12 @@
 <?php
 require_once('init.php');
-if ($_SESSION) {
+if ($user) {
     header("Location: index.php");
 }
-if ($_SESSION['name']) {
+if ($user['name']) {
     $authorization_error;
 } else {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $registration = [
             'email' => $_POST['email'],
             'password' => $_POST['password'],
@@ -45,15 +45,14 @@ if ($_SESSION['name']) {
         $errors = array_filter($errors);
         $hash = password_hash($password, PASSWORD_DEFAULT);
         if (empty($errors)) {
-            $stmt = db_get_prepare_stmt($con, $users_db, $data = [$date_registration, $email, $name, $hash, $message]);
-            mysqli_stmt_execute($stmt);
+            add_user_to_db ($con, $date_registration, $email, $name, $hash, $message);
             header("Location: login.php");
         }
         $main_content = include_template('registration_template.php', ['errors' => $errors, 'registration' => $registration]);
-        $user_registration = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $_SESSION]);
+        $user_registration = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
     } else {
         $main_content = include_template('registration_template.php');
-        $user_registration = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $_SESSION]);
+        $user_registration = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
     }
     print($user_registration);
 }

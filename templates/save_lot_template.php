@@ -14,7 +14,7 @@
             <select id="category" name="category">
                 <option><?= get_post_category($lot['category']); ?></option>
                 <?php foreach ($categories as $category): ?>
-                    <option id="<?= $category['id']; ?>"><?= $category['title']; ?></option>
+                    <option id="<?= htmlspecialchars($category['id']); ?>"><?= htmlspecialchars($category['title']); ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="form__error"><?= $errors['category'] ?? ""; ?></span>

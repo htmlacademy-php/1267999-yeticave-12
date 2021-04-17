@@ -147,7 +147,7 @@ function get_user_information($email, $con)
  * @param mixed $con подключение к базе данных
  * @return array найденные лоты из БД
  */
-function search_lot($search, $con)
+function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page)
 {
     $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
     INNER JOIN category ON lot.id_category = category.id
@@ -160,7 +160,11 @@ function search_lot($search, $con)
     $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
     $count_page = floor(count($found_lots) / $LIMIT_SAMPLE_LOT);
     if ($count_page > 0) {
-        $offset = ($count_page - 1) * $LIMIT_SAMPLE_LOT;
+        if (!$page) {
+            $offset = 0;
+        } else {
+            $offset = ($page - 1) * $LIMIT_SAMPLE_LOT;
+        }
         $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
     INNER JOIN category ON lot.id_category = category.id
     WHERE MATCH(name, description) AGAINST(?)
@@ -183,6 +187,44 @@ function search_lot($search, $con)
     ];
     return $found;
 }
+
+
+//function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page = 0)
+//{
+//    $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
+//    INNER JOIN category ON lot.id_category = category.id
+//    WHERE MATCH(name, description) AGAINST(?)
+//    ORDER BY date_creation";
+//    $stmt = mysqli_prepare($con, $sql);
+//    mysqli_stmt_bind_param($stmt, 's', $search);
+//    mysqli_stmt_execute($stmt);
+//    $res = mysqli_stmt_get_result($stmt);
+//    $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+//    $count_page = floor(count($found_lots) / $LIMIT_SAMPLE_LOT);
+//    if ($count_page > 0) {
+//        $offset = ($count_page - 1) * $LIMIT_SAMPLE_LOT;
+//        $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
+//    INNER JOIN category ON lot.id_category = category.id
+//    WHERE MATCH(name, description) AGAINST(?)
+//    ORDER BY date_creation
+//    LIMIT $offset, $LIMIT_SAMPLE_LOT";
+//        $stmt = mysqli_prepare($con, $sql);
+//        mysqli_stmt_bind_param($stmt, 's', $search);
+//        mysqli_stmt_execute($stmt);
+//        $res = mysqli_stmt_get_result($stmt);
+//        $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+//        $found = [
+//            "found_lots" => $found_lots,
+//            "count_page" => $count_page
+//        ];
+//        return $found;
+//    }
+//    $found = [
+//        "found_lots" => $found_lots,
+//        "count_page" => $count_page
+//    ];
+//    return $found;
+//}
 
 /**
  * @param mixed $con подключение к базе данных
@@ -236,9 +278,3 @@ function get_max_bet($con, int $id_lot)
     $my_max_bet = mysqli_fetch_all($result_max_bet, MYSQLI_ASSOC);
     return $my_max_bet;
 }
-
-$lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-$users_db = "INSERT INTO user (date_registration, email, name, password, contacts) VALUES (?, ?, ?, ?, ?)";
-
-$add_rate = "INSERT INTO rate (id_user_game, id_lot, date_rate, price_rate) VALUES (?, ?, ?, ?)";
