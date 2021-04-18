@@ -371,10 +371,30 @@ function get_auction_over($date_completion)
  * @param int $lot_step шаг ставки созданного лота
  * @return int|string id последнего добавленного в бд лота
  */
-function add_lot_to_db($con, $lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step)
-{
+function add_lot_to_db(
+    $con,
+    $lot_category_id,
+    $id_user_lot,
+    $date_creation,
+    $lot_name,
+    $lot_message,
+    $lot_url,
+    $lot_rate,
+    $lot_date,
+    $lot_step
+) {
     $lots_bd = "INSERT INTO lot (id_category, id_user_create, date_creation, name, description, image, price_starting, date_completion, step_rate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [$lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
+    $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [
+        $lot_category_id,
+        $id_user_lot,
+        $date_creation,
+        $lot_name,
+        $lot_message,
+        $lot_url,
+        $lot_rate,
+        $lot_date,
+        $lot_step
+    ]);
     mysqli_stmt_execute($stmt);
     $last_lot = mysqli_insert_id($con);
     return $last_lot;

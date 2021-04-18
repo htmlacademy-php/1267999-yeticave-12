@@ -36,9 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: index.php");
     }
     $main_content = include_template('login_template.php', ['errors' => $errors]);
-    $user_login = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $_SESSION]);
+    $user_login = include_template('other_layout.php',
+        ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $_SESSION]);
 } else {
     $main_content = include_template('login_template.php');
-    $user_login = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $user_information]);
+    $user_login = include_template('other_layout.php',
+        ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $user_information]);
 }
 print($user_login);

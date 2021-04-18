@@ -5,9 +5,11 @@
             <tr class="rates__item<?php if ($my_bet['bet_win'] && $my_bet['auction_over']): ?> rates__item--win<?php elseif (!$my_bet['bet_win'] && $my_bet['auction_over']): ?>  rates__item--end<?php endif; ?>">
                 <td class="rates__info">
                     <div class="rates__img">
-                        <img src="<?= htmlspecialchars($my_bet['image']); ?>" width="54" height="40" alt="<?= htmlspecialchars($my_bet['title']); ?>">
+                        <img src="<?= htmlspecialchars($my_bet['image']); ?>" width="54" height="40"
+                             alt="<?= htmlspecialchars($my_bet['title']); ?>">
                     </div>
-                    <h3 class="rates__title"><a href="lot.php?id=<?= htmlspecialchars($my_bet['lot_id']); ?>"><?= htmlspecialchars($my_bet['name']); ?></a>
+                    <h3 class="rates__title"><a
+                                href="lot.php?id=<?= htmlspecialchars($my_bet['lot_id']); ?>"><?= htmlspecialchars($my_bet['name']); ?></a>
                     </h3>
                     <?php if ($my_bet['bet_win']): ?>
                         <p>Телефон +7 900 667-84-48, Скайп: Vlas92. Звонить с 14 до 20</p>

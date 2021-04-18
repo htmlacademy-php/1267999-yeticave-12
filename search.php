@@ -20,8 +20,10 @@ if (!$con) {
             $array_page[] = $i;
         }
     }
-    $main_content = include_template('search_template.php', ['found_lots' => $found_lots, 'search' => $search, 'array_page' => $array_page]);
-    $content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $user]);
+    $main_content = include_template('search_template.php',
+        ['found_lots' => $found_lots, 'search' => $search, 'array_page' => $array_page]);
+    $content = include_template('other_layout.php',
+        ['content' => $main_content, 'categories' => $categories, 'title' => 'Вход', 'user' => $user]);
 }
 
 print($content);

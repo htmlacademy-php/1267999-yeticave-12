@@ -11,16 +11,17 @@
                         </div>
                         <div class="lot__info">
                             <span class="lot__category"><?= $lot['category']; ?></span>
-                            <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?= htmlspecialchars($lot['id']); ?>"><?= htmlspecialchars($lot['name']); ?></a>
+                            <h3 class="lot__title"><a class="text-link"
+                                                      href="lot.php?id=<?= htmlspecialchars($lot['id']); ?>"><?= htmlspecialchars($lot['name']); ?></a>
                             </h3>
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
                                     <span class="lot__cost"><?= htmlspecialchars($lot['price_starting']); ?><b
-                                            class="rub">р</b></span>
+                                                class="rub">р</b></span>
                                 </div>
                                 <div
-                                    class="lot__timer timer<?php if ($lot['lot_timer']): ?> timer--finishing<?php endif; ?>">
+                                        class="lot__timer timer<?php if ($lot['lot_timer']): ?> timer--finishing<?php endif; ?>">
                                     <?= htmlspecialchars($lot['date_completion']); ?>
                                 </div>
                             </div>
@@ -37,7 +38,7 @@
             <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
             <?php foreach ($array_page as $page): ?>
                 <li class="pagination-item pagination-item-active"><a
-                        href="search.php?page=<?= $page; ?>&search=<?= $search; ?>"><?= $page; ?></a></li>
+                            href="search.php?page=<?= $page; ?>&search=<?= $search; ?>"><?= $page; ?></a></li>
             <?php endforeach; ?>
             <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
         </ul>

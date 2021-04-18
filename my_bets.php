@@ -20,6 +20,7 @@ if (!$con) {
         }
     }
     $main_content = include_template('my_bets.php', ['my_bets' => $my_bets]);
-    $content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'user' => $user, 'title' => 'Мои ставки']);
+    $content = include_template('other_layout.php',
+        ['content' => $main_content, 'categories' => $categories, 'user' => $user, 'title' => 'Мои ставки']);
 }
 print($content);

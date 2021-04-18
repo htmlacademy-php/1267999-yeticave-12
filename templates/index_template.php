@@ -6,7 +6,8 @@
         <!--заполните этот список из массива категорий-->
         <?php foreach ($categories as $category): ?>
             <li class="promo__item promo__item--<?= htmlspecialchars($category['code']); ?>">
-                <a class="promo__link" href="all_lots.php?category=<?= $category['id']; ?>"><?= htmlspecialchars($category['title']); ?></a>
+                <a class="promo__link"
+                   href="all_lots.php?category=<?= $category['id']; ?>"><?= htmlspecialchars($category['title']); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -24,7 +25,9 @@
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?= htmlspecialchars($ad['category']); ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?= $ad['id']; ?>"><?= htmlspecialchars($ad['name']); ?></a></h3>
+                    <h3 class="lot__title"><a class="text-link"
+                                              href="lot.php?id=<?= $ad['id']; ?>"><?= htmlspecialchars($ad['name']); ?></a>
+                    </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>

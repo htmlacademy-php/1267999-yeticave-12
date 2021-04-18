@@ -8,5 +8,6 @@ foreach ($ads as $key => $ad) {
     $ads[$key]['lot_timer'] = $lot_timer;
 }
 $main_content = include_template('index_template.php', ['ads' => $ads, 'categories' => $categories]);
-$layout_content = include_template('index_layout.php', ['content' => $main_content, 'title' => 'Yeticave - Главная', 'categories' => $categories, 'user' => $user]);
+$layout_content = include_template('index_layout.php',
+    ['content' => $main_content, 'title' => 'Yeticave - Главная', 'categories' => $categories, 'user' => $user]);
 print($layout_content);

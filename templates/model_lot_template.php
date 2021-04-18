@@ -3,7 +3,8 @@
     <div class="lot-item__content">
         <div class="lot-item__left">
             <div class="lot-item__image">
-                <img src="<?= htmlspecialchars($ads_lot['url']); ?>" width="730" height="548" alt="<?= htmlspecialchars($ads_lot['category']); ?>">
+                <img src="<?= htmlspecialchars($ads_lot['url']); ?>" width="730" height="548"
+                     alt="<?= htmlspecialchars($ads_lot['category']); ?>">
             </div>
             <p class="lot-item__category">Категория: <span><?= htmlspecialchars($ads_lot['category']); ?></span></p>
             <p class="lot-item__description"></p><?= htmlspecialchars($ads_lot['description']); ?></p>
@@ -12,7 +13,7 @@
             <?php if ($user['name']): ?>
                 <div class="lot-item__state">
                     <div
-                        class="lot-item__timer timer<?php if ($ads_lot['lot_timer']): ?> timer--finishing<?php endif ?>">
+                            class="lot-item__timer timer<?php if ($ads_lot['lot_timer']): ?> timer--finishing<?php endif ?>">
                         <?= htmlspecialchars($ads_lot['calculation_date']); ?>
                     </div>
                     <div class="lot-item__cost-state">
@@ -27,7 +28,8 @@
                     <form class="lot-item__form<?= empty($errors) ? "" : " form--invalid"; ?>" action="" method="post">
                         <p class="lot-item__form-item form__item<?= empty($errors['positive_integer'] || $errors['price_validation']) ? "" : " form__item--invalid"; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" placeholder="<?= htmlspecialchars($ads_lot['min_rate']); ?>">
+                            <input id="cost" type="text" name="cost"
+                                   placeholder="<?= htmlspecialchars($ads_lot['min_rate']); ?>">
                             <?php if ($errors['availability']): ?>
                                 <span class="form__error">Сделайте ставку</span>
                             <?php else: ?>
@@ -43,11 +45,11 @@
                 <h3>История ставок (<span><?= count($users_lots); ?></span>)</h3>
                 <table class="history__list">
                     <?php foreach ($users_lots as $lot): ?>
-                    <tr class="history__item">
-                        <td class="history__name"><?= htmlspecialchars($lot['name']); ?></td>
-                        <td class="history__price"><?= htmlspecialchars($lot['price_rate']); ?> р</td>
-                        <td class="history__time"><?= htmlspecialchars($lot['date_rate']); ?></td>
-                    </tr>
+                        <tr class="history__item">
+                            <td class="history__name"><?= htmlspecialchars($lot['name']); ?></td>
+                            <td class="history__price"><?= htmlspecialchars($lot['price_rate']); ?> р</td>
+                            <td class="history__time"><?= htmlspecialchars($lot['date_rate']); ?></td>
+                        </tr>
                     <?php endforeach; ?>
                 </table>
             </div>

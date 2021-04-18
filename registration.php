@@ -45,14 +45,17 @@ if ($user['name']) {
         $errors = array_filter($errors);
         $hash = password_hash($password, PASSWORD_DEFAULT);
         if (empty($errors)) {
-            add_user_to_db ($con, $date_registration, $email, $name, $hash, $message);
+            add_user_to_db($con, $date_registration, $email, $name, $hash, $message);
             header("Location: login.php");
         }
-        $main_content = include_template('registration_template.php', ['errors' => $errors, 'registration' => $registration]);
-        $user_registration = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
+        $main_content = include_template('registration_template.php',
+            ['errors' => $errors, 'registration' => $registration]);
+        $user_registration = include_template('other_layout.php',
+            ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
     } else {
         $main_content = include_template('registration_template.php');
-        $user_registration = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
+        $user_registration = include_template('other_layout.php',
+            ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
     }
     print($user_registration);
 }

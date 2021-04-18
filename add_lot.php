@@ -51,14 +51,22 @@ if (!$_SESSION['name']) {
         $lot_url = save_file($errors, $lot_file);
         $id_user_lot = $_SESSION['id'];
         if (empty($errors)) {
-            $last_lot = add_lot_to_db ($con, $lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step);
+            $last_lot = add_lot_to_db($con, $lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message,
+                $lot_url, $lot_rate, $lot_date, $lot_step);
             header("Location: lot.php?id=$last_lot");
         }
-        $main_content = include_template('save_lot_template.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
-        $add_lot_content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $_SESSION]);
+        $main_content = include_template('save_lot_template.php',
+            ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
+        $add_lot_content = include_template('other_layout.php', [
+            'content' => $main_content,
+            'categories' => $categories,
+            'title' => 'Добавление лота',
+            'user' => $_SESSION
+        ]);
     } else {
         $main_content = include_template('save_lot_template.php', ['categories' => $categories]);
-        $add_lot_content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $user]);
+        $add_lot_content = include_template('other_layout.php',
+            ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $user]);
     }
     print($add_lot_content);
 }

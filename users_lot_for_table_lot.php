@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
     if (empty($errors)) {
         $user_id = $_SESSION['id'];
-        add_user_rate_to_db ($con, $user_id, $lot_id, $today, $cost);
+        add_user_rate_to_db($con, $user_id, $lot_id, $today, $cost);
         header("Location: lot.php?id=$lot_id");
     }
 }

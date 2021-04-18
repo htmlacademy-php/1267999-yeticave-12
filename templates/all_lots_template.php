@@ -18,10 +18,10 @@
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
                                     <span class="lot__cost"><?= htmlspecialchars($lot['price_starting']); ?><b
-                                            class="rub">р</b></span>
+                                                class="rub">р</b></span>
                                 </div>
                                 <div
-                                    class="lot__timer timer<?php if ($lot['lot_timer']): ?> timer--finishing<?php endif; ?>">
+                                        class="lot__timer timer<?php if ($lot['lot_timer']): ?> timer--finishing<?php endif; ?>">
                                     <?= htmlspecialchars($lot['date_completion']); ?>
                                 </div>
                             </div>
@@ -38,7 +38,7 @@
             <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
             <?php foreach ($array_page as $page): ?>
                 <li class="pagination-item pagination-item-active"><a
-                        href="all-lots.php?page=<?= $page; ?>&category=<?= $category; ?>"><?= $page; ?></a></li>
+                            href="all-lots.php?page=<?= $page; ?>&category=<?= $category; ?>"><?= $page; ?></a></li>
             <?php endforeach; ?>
             <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
         </ul>

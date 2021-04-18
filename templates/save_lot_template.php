@@ -22,7 +22,8 @@
     </div>
     <div class="form__item form__item--wide<?= empty($errors['message']) ? "" : " form__item--invalid"; ?>">
         <label for="message">Описание <sup>*</sup></label>
-        <textarea id="message" name="message" placeholder="Напишите описание лота"><?= get_post_val($lot['message']); ?></textarea>
+        <textarea id="message" name="message"
+                  placeholder="Напишите описание лота"><?= get_post_val($lot['message']); ?></textarea>
         <span class="form__error"><?= $errors['message'] ?? ""; ?></span>
     </div>
     <div class="form__item form__item--file<?= empty($errors['file']) ? "" : " form__item--invalid"; ?>">
