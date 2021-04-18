@@ -145,9 +145,11 @@ function get_user_information($email, $con)
 /**
  * @param string $search поиск по названию или описанию лота
  * @param mixed $con подключение к базе данных
- * @return array найденные лоты из БД
+ * @param int $limit количество объявлений на странице
+ * @param int $page количество страниц объявлений
+ * @return array ассоциативный массив found_lots - найденные лоты, count_page - количество страниц, занимаемое лотами
  */
-function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page)
+function search_lot($search, $con, $limit, $page)
 {
     $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
     INNER JOIN category ON lot.id_category = category.id
@@ -158,18 +160,18 @@ function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page)
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
-    $count_page = floor(count($found_lots) / $LIMIT_SAMPLE_LOT);
+    $count_page = floor(count($found_lots) / $limit);
     if ($count_page > 0) {
         if (!$page) {
             $offset = 0;
         } else {
-            $offset = ($page - 1) * $LIMIT_SAMPLE_LOT;
+            $offset = ($page - 1) * $limit;
         }
         $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
     INNER JOIN category ON lot.id_category = category.id
     WHERE MATCH(name, description) AGAINST(?)
     ORDER BY date_creation
-    LIMIT $offset, $LIMIT_SAMPLE_LOT";
+    LIMIT $offset, $limit";
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt, 's', $search);
         mysqli_stmt_execute($stmt);
@@ -187,44 +189,6 @@ function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page)
     ];
     return $found;
 }
-
-
-//function search_lot($search, $con, $LIMIT_SAMPLE_LOT, $page = 0)
-//{
-//    $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
-//    INNER JOIN category ON lot.id_category = category.id
-//    WHERE MATCH(name, description) AGAINST(?)
-//    ORDER BY date_creation";
-//    $stmt = mysqli_prepare($con, $sql);
-//    mysqli_stmt_bind_param($stmt, 's', $search);
-//    mysqli_stmt_execute($stmt);
-//    $res = mysqli_stmt_get_result($stmt);
-//    $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
-//    $count_page = floor(count($found_lots) / $LIMIT_SAMPLE_LOT);
-//    if ($count_page > 0) {
-//        $offset = ($count_page - 1) * $LIMIT_SAMPLE_LOT;
-//        $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
-//    INNER JOIN category ON lot.id_category = category.id
-//    WHERE MATCH(name, description) AGAINST(?)
-//    ORDER BY date_creation
-//    LIMIT $offset, $LIMIT_SAMPLE_LOT";
-//        $stmt = mysqli_prepare($con, $sql);
-//        mysqli_stmt_bind_param($stmt, 's', $search);
-//        mysqli_stmt_execute($stmt);
-//        $res = mysqli_stmt_get_result($stmt);
-//        $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
-//        $found = [
-//            "found_lots" => $found_lots,
-//            "count_page" => $count_page
-//        ];
-//        return $found;
-//    }
-//    $found = [
-//        "found_lots" => $found_lots,
-//        "count_page" => $count_page
-//    ];
-//    return $found;
-//}
 
 /**
  * @param mixed $con подключение к базе данных
@@ -277,4 +241,61 @@ function get_max_bet($con, int $id_lot)
     $result_max_bet = mysqli_query($con, $sql_max_bet);
     $my_max_bet = mysqli_fetch_all($result_max_bet, MYSQLI_ASSOC);
     return $my_max_bet;
+}
+
+/**
+ * @param mixed $con подключение к базе данных
+ * @param int $category id категории
+ * @param $limit int $limit количество объявлений на странице
+ * @param int $page количество страниц объявлений
+ * @return array ассоциативный массив found_lots - найденные лоты, count_page - количество страниц, занимаемое лотами
+ */
+function search_lot_by_category($con, $category, $limit, $page)
+{
+    $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
+    INNER JOIN category ON lot.id_category = category.id
+    WHERE category.id = $category
+    ORDER BY date_creation";
+    $res = mysqli_query($con, $sql);
+    $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    $count_page = floor(count($found_lots) / $limit);
+    if ($count_page > 0) {
+        if (!$page) {
+            $offset = 0;
+        } else {
+            $offset = ($page - 1) * $limit;
+        }
+        $sql = "SELECT lot.id, title as category, date_creation, name, description, image as url, price_starting, date_completion FROM lot
+        INNER JOIN category ON lot.id_category = category.id
+        WHERE category.id = $category
+        ORDER BY date_creation
+        LIMIT $offset, $limit";
+        $res = mysqli_query($con, $sql);
+        $found_lots = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        $found = [
+            "found_lots" => $found_lots,
+            "count_page" => $count_page
+        ];
+        return $found;
+    }
+    $found = [
+        "found_lots" => $found_lots,
+        "count_page" => $count_page
+    ];
+    return $found;
+}
+
+/**
+ * @param mixed $con подключение к базе данных
+ * @param int $category id категории
+ * @return string[]|null название категории по id
+ */
+function get_category($con, $category)
+{
+    $sql_category = "SELECT title
+    FROM category
+    WHERE id = $category";
+    $result_category = mysqli_query($con, $sql_category);
+    $category = mysqli_fetch_assoc($result_category);
+    return $category;
 }
