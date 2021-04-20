@@ -1,10 +1,7 @@
 <?php
 require_once('init.php');
-if ($user) {
+if (!$user) {
     header("Location: index.php");
-}
-if ($user['name']) {
-    $authorization_error;
 } else {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $registration = [

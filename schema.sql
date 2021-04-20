@@ -34,6 +34,7 @@ CREATE TABLE `yeticave`.`lot`
     `price_starting`  DECIMAL(10, 0) NOT NULL,
     `date_completion` TIMESTAMP      NOT NULL,
     `step_rate`       DECIMAL(10, 0) NOT NULL,
+    `winner`          BOOLEAN        NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_category_lot_idx` (`id_category` ASC),
     INDEX `fk_user_lot_idx` (`id_user_create` ASC),

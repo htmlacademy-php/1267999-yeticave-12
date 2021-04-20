@@ -303,3 +303,29 @@ function get_category($con, $category)
     $category = mysqli_fetch_assoc($result_category);
     return $category;
 }
+
+/**
+ * @param mixed $con подключение к базе данных
+ * @return array
+ */
+function getwinner_lots($con)
+{
+    $sql_lots = "SELECT id_user_game, user.name, winner, email, contacts, id_lot, date_rate, price_rate, id_category, title, code, id_user_create, lot.name, description, image, price_starting, date_completion FROM rate
+    INNER JOIN lot ON rate.id_lot = lot.id
+    INNER JOIN category ON lot.id_category = category.id
+    INNER JOIN user ON rate.id_user_game = user.id
+    WHERE price_rate IN (SELECT MAX(price_rate) FROM rate
+    GROUP BY id_lot) && DATE_FORMAT(date_completion, '%Y-%m-%d') <= CURDATE() && winner IS NULL
+ORDER BY id_lot";
+    $result_winner_lots = mysqli_query($con, $sql_lots);
+    $winner_lots = mysqli_fetch_all($result_winner_lots, MYSQLI_ASSOC);
+    return $winner_lots;
+}
+
+function update_winner_lots ($con, $id_lot) {
+    $sql_update = "UPDATE lot SET winner = 1
+WHERE winner IS NULL && id = ?";
+    $stmt = mysqli_prepare($con, $sql_update);
+    mysqli_stmt_bind_param($stmt, 'i', $id_lot);
+    mysqli_stmt_execute($stmt);
+}

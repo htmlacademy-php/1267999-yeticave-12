@@ -1,5 +1,6 @@
 <?php
 require_once('init.php');
+require_once('getwinner.php');
 $ads = get_ads($con);
 foreach ($ads as $key => $ad) {
     $date_completion = get_date($ad['calculation_date'])['times'];

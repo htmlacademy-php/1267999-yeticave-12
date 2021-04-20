@@ -9,5 +9,7 @@
             "email": "lable_01@mail.ru"
         }
     ],
-    "require": {}
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
 }
