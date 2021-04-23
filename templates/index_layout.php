@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?= $title; ?></title>
+    <title><?= htmlspecialchars($title); ?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -23,7 +23,7 @@
                 <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
                 <?php if ($user['name']): ?>
                     <div class="user-menu__logged">
-                        <p><?= $user['name']; ?></p>
+                        <p><?= htmlspecialchars($user['name']); ?></p>
                         <a class="user-menu__bets" href="my_bets.php">Мои ставки</a>
                         <a class="user-menu__logout" href="logout.php">Выход</a>
                     </div>
@@ -50,7 +50,7 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?= $category['title']; ?></a>
+                    <a href="all_lots.php?category=<?= $category['id']; ?>"><?= htmlspecialchars($category['title']); ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

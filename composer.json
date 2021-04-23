@@ -1,0 +1,15 @@
+{
+    "name": "php/yeticave",
+    "description": "website for auction",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eroshkin Konstantin",
+            "email": "lable_01@mail.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

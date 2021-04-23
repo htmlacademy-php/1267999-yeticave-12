@@ -3,7 +3,7 @@ require_once('init.php');
 if (!$_SESSION['name']) {
     $authorization_error;
 } else {
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lot = [
             'name' => $_POST['lot-name'],
             'category' => $_POST['category'],
@@ -26,10 +26,10 @@ if (!$_SESSION['name']) {
         $errors = [];
         $rules = [
             'lot-name' => function ($lot_name) {
-                return validate_correct_length($lot_name, 5, 128);
+                return validate_correct_length($lot_name, MIN_VALUE, MAX_VALUE);
             },
             'message' => function ($lot_message) {
-                return validate_correct_length($lot_message, 20, 512);
+                return validate_correct_length($lot_message, MIN_VALUE, MAX_VALUE);
             },
             'lot-rate' => function ($lot_rate) {
                 return validate_price($lot_rate);
@@ -44,23 +44,29 @@ if (!$_SESSION['name']) {
             }
         }
         $error_category = validate_category($categories, $lot_category);
-        $error_file = validate_file($lot_file);
+        $error_file = validate_file($lot_file, MIN_SIZE_FILE);
         $error_date = validate_date($lot_date, $date_valid_separator);
         $errors = get_errors($error_file, $error_category, $error_date, $errors);
         $errors = array_filter($errors);
         $lot_url = save_file($errors, $lot_file);
         $id_user_lot = $_SESSION['id'];
         if (empty($errors)) {
-            $stmt = db_get_prepare_stmt($con, $lots_bd, $data = [$lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message, $lot_url, $lot_rate, $lot_date, $lot_step]);
-            mysqli_stmt_execute($stmt);
-            $last_lot = mysqli_insert_id($con);
+            $last_lot = add_lot_to_db($con, $lot_category_id, $id_user_lot, $date_creation, $lot_name, $lot_message,
+                $lot_url, $lot_rate, $lot_date, $lot_step);
             header("Location: lot.php?id=$last_lot");
         }
-        $main_content = include_template('save_lot_template.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
-        $add_lot_content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $_SESSION]);
+        $main_content = include_template('save_lot_template.php',
+            ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
+        $add_lot_content = include_template('other_layout.php', [
+            'content' => $main_content,
+            'categories' => $categories,
+            'title' => 'Добавление лота',
+            'user' => $_SESSION
+        ]);
     } else {
         $main_content = include_template('save_lot_template.php', ['categories' => $categories]);
-        $add_lot_content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $_SESSION]);
+        $add_lot_content = include_template('other_layout.php',
+            ['content' => $main_content, 'categories' => $categories, 'title' => 'Добавление лота', 'user' => $user]);
     }
     print($add_lot_content);
 }

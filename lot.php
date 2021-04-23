@@ -15,14 +15,21 @@ if (!$con) {
             $ads_lot = get_ads_lot($lot_id, $con);
             $ads_lot['lot_timer'] = get_date($ads_lot['calculation_date'])['is_finishing'];
             $ads_lot['calculation_date'] = get_date($ads_lot['calculation_date'])['times'];
-            if ($ads_lot['price_rate']) {
-                $ads_lot['min_rate'] = $ads_lot['step_rate'] + $ads_lot['price_rate'];
-            } else {
-                $ads_lot['min_rate'] = $ads_lot['price_starting'] + $ads_lot['step_rate'];
-            }
+            $ads_lot['min_rate'] = $ads_lot['step_rate'] + (($ads_lot['price_rate']) ? $ads_lot['price_rate'] : $ads_lot['price_starting']);
             require_once('users_lot_for_table_lot.php');
-            $main_content = include_template('model_lot_template.php', ['ads_lot' => $ads_lot, 'user' => $_SESSION, 'lot_id' => $lot_id, 'errors' => $errors, 'users_lots' => $users_lots]);
-            $content = include_template('other_layout.php', ['content' => $main_content, 'categories' => $categories, 'user' => $_SESSION, 'title' => 'Добавление лота']);
+            $main_content = include_template('model_lot_template.php', [
+                'ads_lot' => $ads_lot,
+                'user' => $_SESSION,
+                'lot_id' => $lot_id,
+                'errors' => $errors,
+                'users_lots' => $users_lots
+            ]);
+            $content = include_template('other_layout.php', [
+                'content' => $main_content,
+                'categories' => $categories,
+                'user' => $user,
+                'title' => 'Добавление лота'
+            ]);
         }
     }
 }

@@ -1,6 +1,6 @@
 <div class="container">
     <section class="lots">
-        <h2>Результаты поиска по запросу «<span><?= $search; ?></span>»</h2>
+        <h2>Все лоты в категории <span>«<?= $category['title']; ?>»</span></h2>
         <?php if ($found_lots): ?>
             <ul class="lots__list">
                 <?php foreach ($found_lots as $lot): ?>
@@ -38,7 +38,7 @@
             <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
             <?php foreach ($array_page as $page): ?>
                 <li class="pagination-item pagination-item-active"><a
-                            href="search.php?page=<?= $page; ?>&search=<?= $search; ?>"><?= $page; ?></a></li>
+                            href="all-lots.php?page=<?= $page; ?>&category=<?= $category; ?>"><?= $page; ?></a></li>
             <?php endforeach; ?>
             <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
         </ul>
