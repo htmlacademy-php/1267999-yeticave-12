@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 if (!$_SESSION['name']) {
-    $authorization_error;
+    http_response_code(403);
 } else {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lot = [

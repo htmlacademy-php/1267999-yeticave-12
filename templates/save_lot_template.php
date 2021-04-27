@@ -6,7 +6,7 @@
             <!-- form__item--invalid -->
             <label for="lot-name">Наименование <sup>*</sup></label>
             <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота"
-                   value="<?= get_post_val($lot['name']); ?>">
+                   value="<?= htmlspecialchars(get_post_val($lot['name'])); ?>">
             <span class="form__error"><?= $errors['lot-name'] ?? ""; ?></span>
         </div>
         <div class="form__item<?= empty($errors['category']) ? "" : " form__item--invalid"; ?>">
@@ -23,7 +23,7 @@
     <div class="form__item form__item--wide<?= empty($errors['message']) ? "" : " form__item--invalid"; ?>">
         <label for="message">Описание <sup>*</sup></label>
         <textarea id="message" name="message"
-                  placeholder="Напишите описание лота"><?= get_post_val($lot['message']); ?></textarea>
+                  placeholder="Напишите описание лота"><?= htmlspecialchars(get_post_val($lot['message'])); ?></textarea>
         <span class="form__error"><?= $errors['message'] ?? ""; ?></span>
     </div>
     <div class="form__item form__item--file<?= empty($errors['file']) ? "" : " form__item--invalid"; ?>">

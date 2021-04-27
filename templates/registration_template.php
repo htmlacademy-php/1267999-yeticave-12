@@ -18,13 +18,13 @@
     <div class="form__item<?= empty($errors['name']) ? "" : " form__item--invalid"; ?>">
         <label for="name">Имя <sup>*</sup></label>
         <input id="name" type="text" name="name" placeholder="Введите имя"
-               value="<?= get_post_val($registration['name']); ?>">
+               value="<?= htmlspecialchars(get_post_val($registration['name'])); ?>">
         <span class="form__error"><?= $errors['name'] ?? ""; ?></span>
     </div>
     <div class="form__item<?= empty($errors['message']) ? "" : " form__item--invalid"; ?>">
         <label for="message">Контактные данные <sup>*</sup></label>
         <textarea id="message" name="message"
-                  placeholder="Напишите как с вами связаться"><?= get_post_val($registration['message']); ?></textarea>
+                  placeholder="Напишите как с вами связаться"><?= htmlspecialchars(get_post_val($registration['message'])); ?></textarea>
         <span class="form__error"><?= $errors['message'] ?? ""; ?></span>
     </div>
     <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>

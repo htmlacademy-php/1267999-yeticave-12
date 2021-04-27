@@ -13,7 +13,7 @@ if (!$con) {
         $my_bets[$key]['auction_over'] = get_auction_over($my_bet['date_completion']);
         $max_lot_bet = get_max_bet($con, $my_bets[$key]['lot_id'])[0]['price_rate'];
         $my_lot_rate = $my_bets[$key]['price_rate'];
-        if ($max_lot_bet == $my_lot_rate && $my_bets[$key]['auction_over']) {
+        if ($max_lot_bet === $my_lot_rate && $my_bets[$key]['auction_over']) {
             $my_bets[$key]['bet_win'] = true;
         } else {
             $my_bets[$key]['bet_win'] = false;
