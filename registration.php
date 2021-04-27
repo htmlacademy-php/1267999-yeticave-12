@@ -47,13 +47,11 @@ if (!$user) {
         }
         $main_content = include_template('registration_template.php',
             ['errors' => $errors, 'registration' => $registration]);
-        $user_registration = include_template('other_layout.php',
-            ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
     } else {
         $main_content = include_template('registration_template.php');
-        $user_registration = include_template('other_layout.php',
-            ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
     }
+    $user_registration = include_template('other_layout.php',
+        ['content' => $main_content, 'categories' => $categories, 'title' => 'Регистрация', 'user' => $user]);
     print($user_registration);
 }
 
