@@ -163,7 +163,7 @@ function validate_category($categories, $lot_category)
     if (empty($id_categories)) {
         return "Введите название категории";
     }
-    return "";
+    return false;
 }
 
 /**
@@ -188,7 +188,7 @@ function validate_file($lot_file, $min_size_file)
             }
         }
     }
-    return "";
+    return false;
 }
 
 /**
@@ -203,7 +203,7 @@ function validate_correct_length($value, $min, $max)
     if ($len < $min or $len > $max) {
         return "Значение должно быть от $min до $max символов";
     }
-    return "";
+    return false;
 }
 
 /**
@@ -215,7 +215,7 @@ function validate_price($value)
     if (!ctype_digit($value)) {
         return "Содержимое поля должно быть целым числом больше ноля";
     }
-    return "";
+    return false;
 }
 
 /**
@@ -268,7 +268,7 @@ function save_file($errors, $lot_file)
         move_uploaded_file($lot_file['tmp_name'], $file_path . $file_name);
         return $file_url;
     }
-    return "";
+    return false;
 }
 
 /**
@@ -289,7 +289,7 @@ function email_validate($email)
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return "Введите e-mail";
     }
-    return "";
+    return false;
 }
 
 /**
@@ -303,7 +303,7 @@ function validate_repeat_email($users, $email)
     if ($email_repeat) {
         return "Указанный email - '$email' уже используется другим пользователем";
     }
-    return "";
+    return false;
 }
 
 /**
@@ -327,7 +327,7 @@ function password_verification($user_information, $email, $password)
             return "Вы ввели неверный пароль";
         }
     }
-    return "";
+    return false;
 }
 
 /**
@@ -338,7 +338,7 @@ function password_verification($user_information, $email, $password)
 function bid_correctness($cost, $min_rate)
 {
     if ($cost >= $min_rate) {
-        return "";
+        return false;
     }
     return "Введенная ставка должна быть больше или равна минимальной ставке";
 }

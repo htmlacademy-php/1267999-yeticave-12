@@ -307,7 +307,7 @@ function get_category($con, $category)
 
 /**
  * @param mixed $con подключение к базе данных
- * @return array
+ * @return array массив выигрышных лотов по максимальной ставке с пустым флагом winner и дата завершения меньше или равна текущей дате
  */
 function getwinner_lots($con)
 {
@@ -323,6 +323,11 @@ ORDER BY id_lot";
     return $winner_lots;
 }
 
+/**
+ * @param mixed $con подключение к базе данных
+ * @param int $id_lot id лота
+ * добавляет флаг winner по id лота
+ */
 function update_winner_lots ($con, $id_lot) {
     $sql_update = "UPDATE lot SET winner = 1
 WHERE winner IS NULL && id = ?";
@@ -391,6 +396,7 @@ function add_user_to_db($con, $date_registration, $email, $name, $hash, $message
 }
 
 /**
+ * добавляет в базу данных ставку пользователя
  * @param mixed $con подключение к базе данных
  * @param int $user_id id пользователя который сделал ставку
  * @param int $lot_id id лота для ставки
