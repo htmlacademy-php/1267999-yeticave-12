@@ -21,53 +21,6 @@ function is_date_valid(string $date): bool
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
-
-/**
- * Возвращает корректную форму множественного числа
- * Ограничения: только для целых чисел
- *
- * Пример использования:
- * $remaining_minutes = 5;
- * echo "Я поставил таймер на {$remaining_minutes} " .
- *     get_noun_plural_form(
- *         $remaining_minutes,
- *         'минута',
- *         'минуты',
- *         'минут'
- *     );
- * Результат: "Я поставил таймер на 5 минут"
- *
- * @param int $number Число, по которому вычисляем форму множественного числа
- * @param string $one Форма единственного числа: яблоко, час, минута
- * @param string $two Форма множественного числа для 2, 3, 4: яблока, часа, минуты
- * @param string $many Форма множественного числа для остальных чисел
- *
- * @return string Рассчитанная форма множественнго числа
- */
-function get_noun_plural_form(int $number, string $one, string $two, string $many): string
-{
-    $number = (int)$number;
-    $mod10 = $number % 10;
-    $mod100 = $number % 100;
-
-    switch (true) {
-        case ($mod100 >= 11 && $mod100 <= 20):
-            return $many;
-
-        case ($mod10 > 5):
-            return $many;
-
-        case ($mod10 === 1):
-            return $one;
-
-        case ($mod10 >= 2 && $mod10 <= 4):
-            return $two;
-
-        default:
-            return $many;
-    }
-}
-
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  * @param string $name Путь к файлу шаблона относительно папки templates
@@ -130,12 +83,12 @@ function get_price(string $price): string
 }
 
 /**
- * @param string $value значение суперглобального массива POST по ключу
- * @return string если true - возвращает значение суперглобального массива Post по ключу. если false - пустую строку
+ * @param string $value значение суперглобального массива POST, введенного пользователем в поле формы
+ * @return string если true - возвращает значение введенного пользователем значения, если false - пустую строку
  */
 function get_post_val($value)
 {
-    return $value ?? "";
+    return htmlspecialchars($value) ?? false;
 }
 
 /**
@@ -360,7 +313,8 @@ function get_auction_over($date_completion)
  * @param mixed $found массив найденных лотов аукциона
  * @return array массив состоящий из найденных лотов с добавленными значениями и массивом страниц найденных лотов
  */
-function get_founds_lots($found) {
+function get_founds_lots($found)
+{
     $found_lots = $found['found_lots'];
     foreach ($found_lots as $key => $lot) {
         $date_completion = get_date($lot['date_completion'])['times'];
