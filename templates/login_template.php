@@ -4,7 +4,7 @@
     <div class="form__item<?= empty($errors['email']) ? "" : " form__item--invalid"; ?>"> <!-- form__item--invalid -->
         <label for="email">E-mail <sup>*</sup></label>
         <input id="email" type="text" name="email" placeholder="Введите e-mail"
-               value="<?= htmlspecialchars(get_post_val($login['email'])); ?>">
+               value="<?= get_post_val($login['email']); ?>">
         <span class="form__error"><?= $errors['email'] ?? ""; ?></span>
     </div>
     <div class="form__item form__item--last<?= empty($errors['password'] || $errors['password_verification']) ? "" : " form__item--invalid"; ?>">

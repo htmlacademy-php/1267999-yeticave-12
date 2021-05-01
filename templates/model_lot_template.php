@@ -10,7 +10,7 @@
             <p class="lot-item__description"></p><?= htmlspecialchars($ads_lot['description']); ?></p>
         </div>
         <div class="lot-item__right">
-            <?php if ($user['name']): ?>
+            <?php if ($user['name'] && $ads_lot['calculation_date'] > 0): ?>
                 <div class="lot-item__state">
                     <div
                             class="lot-item__timer timer<?php if ($ads_lot['lot_timer']): ?> timer--finishing<?php endif ?>">
